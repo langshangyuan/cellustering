@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Zhiyuan", "Gao", , "121090136@link.cuhk.edu.cn", role = c("aut")),
     person("Zhecheng", "Ren", , "121090464@link.cuhk.edu.cn", role = c("aut", "cre")),
-    person("Ang", "Li", , "121090253@link.cuhk.edu.cn", role = c("aut", "cre"))
+    person("Ang", "Li", , "121090253@link.cuhk.edu.cn", role = c("aut"))
     )
 Description: A toolkit for preprocessing and clustering of single-cell RNA
     sequencing (scRNA-seq) data. This package is designed for users to identify
