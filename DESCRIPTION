@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R:
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: A toolkit for preprocessing and clustering of single-cell RNA sequencing (scRNA-seq) data. This package is designed for users to identify and exploit the heterogeneity in single-cell transcriptomic measurements. Adhering to the standard streamlined scRNA-seq workflow, “cellustering” provides functions for quality control, normalization, feature selection, scaling, dimension reduction, clustering and subsequent results evaluation. See Luecken and Theis (2019) <![doi: 10.15252/msb.20188746](https://doi.org/10.15252/msb.20188746)> for more details.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
