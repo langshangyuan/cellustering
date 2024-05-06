@@ -18,12 +18,6 @@ setClass("Cellustering",
   )
 )
 
-# setValidity("Cellustering", function(object) {
-#   if (length(object@data) == 0) {
-
-#   }
-# })
-
 # Initialize a Cellustering instance
 Cellustering <- function(data,
                          quality = list(),
@@ -31,14 +25,14 @@ Cellustering <- function(data,
                          reduced_dimension = list(),
                          clustering = list()) {
   progress <- c(
-    qc.plot = FALSE,
-    qc.filter = FALSE,
-    run.normalize = FALSE,
-    find.HVG = FALSE,
-    scale.data = FALSE,
-    run.PCA = FALSE,
-    dim.select = FALSE,
-    run.kmeans = FALSE,
+    qc_plot = FALSE,
+    qc_filter = FALSE,
+    normalize = FALSE,
+    find_HVG = FALSE,
+    scale_data = FALSE,
+    PCA = FALSE,
+    dimension_selection = FALSE,
+    kmeans = FALSE,
     run.evaluate = FALSE
   )
 
