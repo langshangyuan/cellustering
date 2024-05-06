@@ -16,11 +16,7 @@ Parameter two Description.
 Function Description
 }
 \examples{
-x <- test_value
-function(test_value) {
-  # Examples
-  pbmc <- scale_data(pbmc)
-}
+pbmc <- scale_data(pbmc)
 pbmc@reduced_dimension$scaled_data[1:5, 1:10]
 
 # Check if the row sums equal to 0

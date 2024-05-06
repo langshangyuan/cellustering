@@ -6,9 +6,9 @@
 #' @return  Parameter two Description.
 #' @export
 #'
+#' @importFrom stats kmeans
+#'
 #' @examples
-#'  x <- test_value
-#'  function(test_value)
 # library(umap)
 kmeans <- function(object,
                    k,
@@ -147,15 +147,14 @@ kmeans <- function(object,
 
 #' Function Description
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
+#' @param object  Parameter one Description.
 #'
 #' @return  Parameter two Description.
 #' @export
 #'
+#' @importFrom stats dist
+#'
 #' @examples
-#'  x <- test_value
-#'  function(test_value)
 compute_silhouette <- function(object) {
   # Compute pairwise distances
   data <- object@clustering$data

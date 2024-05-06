@@ -6,6 +6,8 @@
 #' @return  A `Cellustering` instance.
 #' @export
 #'
+#' @importFrom utils read.table
+#'
 #' @examples
 #' pbmc <- read_10x("hg19")
 #' pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]

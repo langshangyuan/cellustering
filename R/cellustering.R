@@ -1,4 +1,5 @@
 # Define the "Cellustering" class
+#' @importFrom methods is new show
 setClass("Cellustering",
   slots = c(
     data = "data.frame",

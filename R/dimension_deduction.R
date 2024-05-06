@@ -11,8 +11,8 @@
 #' pbmc <- principal_component_analysis(pbmc, PC1 = 3, PC2 = 4)
 #' @importFrom ggplot2 theme element_text
 principal_component_analysis <- function(object,
-                    PC1 = 1,
-                    PC2 = 2) {
+                                         PC1 = 1,
+                                         PC2 = 2) {
   # Check if the object belongs to "Cellustering class"
   if (!is(object, "Cellustering")) {
     stop("Please input a Cellustering object.")
@@ -85,10 +85,10 @@ principal_component_analysis <- function(object,
 #'
 #' @return  Parameter two Description.
 #' @export
+#' @importFrom utils head
+#' @importFrom stats dnorm sd
 #'
 #' @examples
-#'  x <- test_value
-#'  function(test_value)
 select_proper_dimension <- function(object,
                                     lower_bound = 1,
                                     upper_bound = 30) {

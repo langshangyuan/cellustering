@@ -17,7 +17,3 @@ Parameter two Description.
 \description{
 Function Description
 }
-\examples{
- x <- test_value
- function(test_value)
-}

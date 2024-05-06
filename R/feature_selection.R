@@ -6,13 +6,15 @@
 #' @return  Parameter two Description.
 #' @export
 #'
+#' @importFrom ggplot2 ggplot geom_point aes geom_point labs scale_x_continuous
+#' scale_y_continuous
+#' @importFrom stats loess predict var
+#'
 #' @examples
 #' # find_HVG(123) # report error
 #' # scale_data(pbmc) # report error
 #' pbmc <- find_HVG(pbmc)
 #' pbmc@HVG$HVG_plot
-#' @importFrom ggplot2 ggplot geom_point aes geom_point labs scale_x_continuous
-#' scale_y_continuous
 find_HVG <- function(object,
                      n_feature = 2000,
                      loess_span = 0.5) {
