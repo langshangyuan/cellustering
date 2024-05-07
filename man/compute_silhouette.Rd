@@ -7,9 +7,7 @@
 compute_silhouette(object)
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
-
-\item{parameter_2}{Parameter two Description.}
+\item{object}{Parameter one Description.}
 }
 \value{
 Parameter two Description.

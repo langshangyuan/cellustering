@@ -30,20 +30,14 @@ Function Description
 # qc_filter(123) # report Error
 # qc_filter(pbmc, min.count.depth = -1) # report Error
 # qc_filter(pbmc, min.cells = "abc") # report Error
-pbmc <- read_10x("hg19")
-pbmc <- qc_filter(pbmc)
+pbmc <- qc_filter(pbmc_ready_to_filter)
 dim(pbmc@data)
 
-pbmc <- qc_filter(pbmc,
+pbmc <- qc_filter(pbmc_ready_to_filter,
   min_feature = 200, max_feature = 2500,
   max_mito_percent = 5, min_cell = 3
 )
 dim(pbmc@data)
 # Then we check the plots again
 pbmc <- qc_plot(pbmc)
-head(pbmc@QC$Cell.data)
-head(pbmc@QC$Feature.data)
-pbmc@QC$Cell.plot
-pbmc@QC$Feature.plot
-pbmc@QC$Violin.plot
 }

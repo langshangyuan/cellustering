@@ -156,6 +156,10 @@ kmeans <- function(object,
 #'
 #' @examples
 compute_silhouette <- function(object) {
+  # Check if the object belongs to "Cellustering class"
+  if (!is(object, "Cellustering")) {
+    stop("Please input a Cellustering object.")
+  }
   # Compute pairwise distances
   data <- object@clustering$data
   distances <- as.matrix(dist(data))

@@ -10,7 +10,7 @@
 #' normalize(123) # report error
 #' normalize(pbmc, scale.factor = -100) # report error
 #' normalize(pbmc, log.transformation = "abc") # report error
-#' find.HVG(pbmc) # report error
+#' find_HVG(pbmc) # report error
 #' col_sum_before <- sum(pbmc@data[, 1])
 #' element_before <- pbmc@data[30, 1]
 #' pbmc <- normalize(pbmc, scale_factor = 1e6)

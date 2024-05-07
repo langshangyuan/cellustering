@@ -21,9 +21,6 @@ pbmc <- read_10x("hg19")
 qc_plot(123) # report Error
 qc_filter(pbmc) # report Error
 pbmc <- qc_plot(pbmc)
-head(pbmc@QC$Cell.data)
-head(pbmc@QC$Feature.data)
-pbmc@QC$Cell.plot
-pbmc@QC$Feature.plot
-pbmc@QC$Violin.plot
+head(pbmc@quality$cell_data)
+head(pbmc@quality$feature_data)
 }

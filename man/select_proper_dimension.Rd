@@ -17,3 +17,6 @@ Parameter two Description.
 \description{
 Function Description
 }
+\examples{
+pbmc <- select_proper_dimension(pbmc)
+}

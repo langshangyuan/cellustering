@@ -89,6 +89,7 @@ principal_component_analysis <- function(object,
 #' @importFrom stats dnorm sd
 #'
 #' @examples
+#' pbmc <- select_proper_dimension(pbmc)
 select_proper_dimension <- function(object,
                                     lower_bound = 1,
                                     upper_bound = 30) {
