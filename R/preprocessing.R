@@ -198,12 +198,22 @@ qc_plot_violin <- function(object) {
   object
 }
 
-#' Function Description
+#' Filter out low-quality cells and genes based on user-defined conditions.
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
-#'
-#' @return  Parameter two Description.
+#' @param  object  A `Cellustering` instance. 
+#' @param  min_count_depth  The minimum count depth allowed for a cell.
+#' @param  max_count_depth  The maximum count depth allowed for a cell.
+#' @param  min_feature  The minimum number of features allowed for a cell.
+#' @param  max_feature  The maximum number of features allowed for a cell.
+#' @param  max_mito_percent  The maximum mitochondrial gene percentage allowed
+#' for a cell.
+#' @param  min_total_expression  The minimum total expression allowed for a 
+#' gene.
+#' @param  min_cell  The minimum number of cells in which a gene must be 
+#'                   expressed.
+
+#' @return  A `Cellustering` instance with cells and genes satisfying the 
+#' filtering conditions.
 #' @export
 #'
 #' @examples

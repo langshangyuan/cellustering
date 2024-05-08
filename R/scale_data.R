@@ -1,8 +1,10 @@
-#' Function Description
+#' Scale and center the selected features (HVG) data，ensuring that each HVG's 
+#' expression counts have mean 0 and variance 1.
 #'
-#' @param  object  Parameter one Description.
+#' @param  object A `Cellustering` instance.
 #'
-#' @return  Parameter two Description.
+#' @return The `Cellusetering` instance with the scaled data added to the 
+#' `reduced_dimension` slot.
 #' @export
 #'
 #' @examples

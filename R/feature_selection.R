@@ -1,9 +1,12 @@
-#' Function Description
+#' Identify, visualize, and select features called highly variable genes (HVGs).
+#' 
+#' @param  object  A `Cellustering` instance.
+#' @param  n_feature  The number of features to select.
+#' @param  loess_span  The span parameter for the local regression model, 
+#' controlling smoothness of the fitted curve.
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
-#'
-#' @return  Parameter two Description.
+#' @return  The `Cellusetering` instance with HVG names and plot added to the 
+#' `HVG` slot.
 #' @export
 #'
 #' @importFrom ggplot2 ggplot geom_point aes geom_point labs scale_x_continuous

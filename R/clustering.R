@@ -1,9 +1,13 @@
-#' Function Description
+#' Perform cluster analysis with the K-means clustering algorithm.
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
+#' @param  object  A `Cellustering` instance. 
+#' @param  k  The number of clusters.
+#' @param  dimensions  The number of principal components used for clustering.
+#' @param umap Determine whether to use Uniform Manifold Approximation and 
+#' Projection (UMAP) for visualization.
 #'
-#' @return  Parameter two Description.
+#' @return  The `Cellustering` instance with clustering results and 
+#' visualization added to the `clustering` slot.
 #' @export
 #'
 #' @importFrom stats kmeans
@@ -145,11 +149,12 @@ kmeans <- function(object,
   invisible(object)
 }
 
-#' Function Description
+#' Calculate the average silhouette coefficient for the clustering results.
 #'
-#' @param object  Parameter one Description.
+#' @param object  A `Cellustering` instance.
 #'
-#' @return  Parameter two Description.
+#' @return The `Cellustering` instance with the average silhouette coefficient 
+#' added to the `clustering` slot.
 #' @export
 #'
 #' @importFrom stats dist
@@ -188,5 +193,9 @@ compute_silhouette <- function(object) {
     silhouette_values[i] <- (b_i - a_i) / max(a_i, b_i)
   }
   # Average silhouette value
-  mean(silhouette_values)
+  mean_silhouette <- mean(silhouette_values)
+  print(paste("The mean value of silhouette coefficients:", mean_silhouette))
+  object@progress["evaluate"] <- TRUE
+  object@clustering$silhouette_coefficient <- mean_silhouette
+  invisible(object)
 }

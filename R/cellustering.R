@@ -15,7 +15,7 @@ setClass("Cellustering",
     HVG = list(),
     reduced_dimension = list(),
     clustering = list(),
-    progress = vector(mode = "logical", length = 8)
+    progress = vector(mode = "logical", length = 9)
   )
 )
 
@@ -34,7 +34,7 @@ Cellustering <- function(data,
     PCA = FALSE,
     dimension_selection = FALSE,
     kmeans = FALSE,
-    run.evaluate = FALSE
+    evaluate = FALSE
   )
 
   new("Cellustering",

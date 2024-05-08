@@ -1,8 +1,12 @@
-#' Function Description
-#' @param  object  Parameter one Description.
-#' @param  object  Parameter one Description.
+#' Perform Principal Component Analysis (PCA) and visualize the data with two 
+#' specified principal components (PCs).
+#' 
+#' @param  object A `Cellustering` instance. 
+#' @param  PC1  The index of the first principal component to be visualized. 
+#' @param  PC2  The index of the second principal component to be visualized. 
 #'
-#' @return  Parameter two Description.
+#' @return  The `Cellustering` instance with singular value decomposition (SVD) 
+#' information and PCA plot added to the `reduced_dimension` slot.
 #' @export
 #'
 #' @examples
@@ -78,12 +82,14 @@ principal_component_analysis <- function(object,
 
 # Examples
 
-#' Function Description
+#' Determine an appropriate dimension for data to be reduced to. 
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
+#' @param  object  A `Cellustering` instance.
+#' @param  lower_bound  The minimum number of principal components to consider.
+#' @param  upper_bound  The maximum number of principal components to consider.
 #'
-#' @return  Parameter two Description.
+#' @return  The `Cellusetering` instance with suggested dimension and plots 
+#' added to the `reduced_dimension` slot.
 #' @export
 #' @importFrom utils head
 #' @importFrom stats dnorm sd

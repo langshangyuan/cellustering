@@ -1,9 +1,16 @@
-#' Function Description
+#' Normalize the data using the Counts per Million (CPM) normalization 
+#' protocol. The purpose of normalization is to remove the variations in count 
+#' depths among different cells, and to place the gene expression levels of 
+#' different cells on a comparable scale.
 #'
-#' @param object  Parameter one Description.
-#' @param scale_factor  Parameter two Description.
+#' @param object A `Cellustering` instance.
+#' @param scale_factor The level to which each cell's total count depth is 
+#' normalized.
+#' @param log_transformation Determine whether to perform log-transformation 
+#' after the CPM normalization.
 #'
-#' @return  Parameter two Description.
+#' @return  The `Cellustering` instance with normalized data stored in the 
+#' `data` slot.
 #' @export
 #'
 #' @examples

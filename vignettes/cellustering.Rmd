@@ -17,3 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(cellustering)
 ```
+
+
+The purpose is to remove the variations in count depths between different cells, and to place the gene expression levels of different cells on a comparable scale.
