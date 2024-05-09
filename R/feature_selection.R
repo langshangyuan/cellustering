@@ -1,4 +1,4 @@
-#' Identify, visualize, and select features called highly variable genes (HVGs).
+#' Identify, visualize, and keep features called highly variable genes (HVGs).
 #' 
 #' @param  object  A `Cellustering` instance.
 #' @param  n_feature  The number of features to select.

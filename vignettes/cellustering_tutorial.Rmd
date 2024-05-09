@@ -16,20 +16,213 @@ knitr::opts_chunk$set(
 
 This vignette offers you a guided tutorial on using `Cellustering`, a toolkit designed for the preprocessing and clustering analysis of single-cell RNA sequencing (scRNA-seq) data. In this tutorial, we will demonstrate the usage of our package through a streamlined analysis of a Peripheral Blood Mono-nuclear Cells (PBMC) 10X Genomics dataset. We will also illuminate the principles behind methodologies used in our package, and underscore the distinctive advantages that set `Cellustering` apart from previous solutions in the field.
 
-```{r setup}
+```{r setup, message=FALSE}
 library(cellustering)
 ```
 
-# Read in the Data
+# Data Loading
 
-## `read_10x`: Initialize `Cellustering` instance from 10X Genomics dataset
+We start by reading in the scRNA-seq data.
 
-We start by reading in the scRNA-seq data. The `read_10x()` function reads in the data from a file directory containing the outputs of the [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger) pipeline from 10X. Notice that the file format is required to be the [Market Exchange Format (MEX)](https://www.10xgenomics.com/cn/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices). A `Cellustering` instance with data stored in the `data` slot will be automatically created and returned.
+## `read_10x()`: Create `Cellustering` instance from 10X Genomics data
 
-```{r}
+`read_10x()` function reads in the data from a file directory containing the outputs of the [Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger) pipeline from 10X. Notice that the file format is required to be the [Market Exchange Format (MEX)](https://www.10xgenomics.com/cn/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices). `read_10x()` combines the data in these files and generates a [UMI](https://www.illumina.com/techniques/sequencing/ngs-library-prep/multiplexing/unique-molecular-identifiers.html) count matrix. A `Cellustering` instance with count matrix stored in the `data` slot will be automatically created and returned.
+
+```{r read_10x}
 pbmc <- read_10x("/Users/ren/Documents/hg19")
-pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
+pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:4]
+```
+
+### Advantages of `Cellustering` over others
+
+As the pivotal tool within the realm of scRNA-seq data analysis, Cell Ranger standardizes its output in the MEX format. `Cellustering` can directly read in the data in this format, eliminating the need for manual data conversion steps required by other packages such as `SC3` and `TSCAN`.
+
+### Connection to course materials
+
++ Testing: `read_10x()` checks whether user inputs a valid directory containing files in the MEX format.
++ Data structures: `read_10x()` manipulates data structures like matrix and data frame.
++ Data loading: `read_10x()` reads in the data through a directory.
+
+## About `Cellustering` class
+
+In `Cellustering` package, every function operates on an instance of the `Cellustering` class. All data and plots produced during the analysis process are stored in the corresponding slots of this instance. The `Cellustering` class containing the following slots:
+
++ data: Stores a data frame containing the UMI count matrix. Functions in the subsequent steps will access and may overwrite this data frame.
++ quality: Stores the data and plots produced during the quality control steps.
++ HVG: Stores the names and plots of genes selected during the feature selection step.
++ reduced_dimension: Stores the data and plots produced during the dimension reduction step.
++ clustering: Stores the data and plots produced during the clustering step.
++ progress: Stores the progress of the whole analysis process.
+
+The slots of an `Cellustering` instance can be accessed through the `@` operator.
+
+```{r cellustering_class}
+class(pbmc)[1]
+slotNames(pbmc)
+pbmc@progress
 ```
 
 
-The purpose is to remove the variations in count depths between different cells, and to place the gene expression levels of different cells on a comparable scale.
+## About `pbmc` data
+
+The `pbmc` data is stored in a UMI count matrix with dimension 32738 $\times$ 2700. The values in this matrix represent the count of molecules for each gene (i.e. feature; row) that are detected in each cell (i.e. cellular barcode; column). The raw data can be found [here](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz).
+
+```{r pbmc_data}
+dim(pbmc@data)
+```
+
+# Quality Control
+
+Before analysing the single-cell gene expression data, we must ensure that all cellular barcodes correspond to viable cells, and all genes do express in some cells. Therefore, the quality control (QC) is needed.
+
+Cell QC is commonly performed based on three QC covariates: the number of counts per cell (count depth), the number of genes per cell (feature counts), and the fraction of counts from mitochondrial genes per cell (mitochondrial percent) ([Ilicic et al, 2016](https://link.springer.com/article/10.1186/s13059-016-0888-1); [Griffiths et al, 2018](https://www.embopress.org/doi/full/10.15252/msb.20178046)). The outlier cells in these covariates can correspond to dying cells, cells whose membranes are broken, or doublets, thus awaiting to be filtered out.
+
++ Indicators of dying cells and cells whose membranes are broken:
+  * Low count depth.
+  * Few detected genes.
+  * High fraction of mitochondrial counts.
++ Indicators of doublets:
+  * High count depth.
+  * High detected genes.
+
+According to [Luecken and Theis (2019)](https://www.embopress.org/doi/full/10.15252/msb.20188746), considering any of these three cell QC covariates in isolation can lead to misinterpretation of cellular signals. For example, cells with a comparatively high fraction of mitochondrial counts may be involved in respiratory processes. Thus, cell QC covariates should be considered jointly when univariate thresholding decisions are made.
+
+Gene QC is commonly performed based on the number of counts per gene (total expression) and the number of cells per gene (cell counts). Genes with low values in these two covariates need to be filtered out.
+
+## `qc_plot()`: Create plots to facilitate quality control
+
+To help determine the thresholds for cell QC, two plots are created. The first plot contains the distributions of three cell QC covariates and their joint scatter. The second plot contains three vilon plots regarding these covariats.
+
+To help determine the thresholds for gene QC, one plot containing the truncated (x-axis value < 25) distributions of two gene QC covariates is generated.
+
+All relevant statistics and plots are added to the `quality` slot of the `Cellustering` instance. `qc_plot()` automatically shows the first plot for cell QC and returns the `Cellustering` instance.
+
+```{r qc_plot, fig.width=8, fig.height=6}
+pbmc <- qc_plot(pbmc)
+head(pbmc@quality$cell)
+head(pbmc@quality$feature)
+pbmc@quality$cell_plot
+pbmc@quality$violin_plot
+pbmc@quality$feature_plot
+```
+
+### Advantages of `Cellustering` over others
+
+For packages like `SC3` and `TSCAN`, they don't have built-in functions for QC.
+
+For packages like `Seurat`, they have built-in functions to plot QC covariates, but
+
++ The fraction of mitochondrial counts needs to be manually computed.
++ The cell QC covariates are isolatedly plotted.
++ Lacking a function to integrate different kinds of plots.
++ Lacking plots for gene QC covariates.
+
+### Connection to course materials
+
++ Testing: `qc_plot()` checks whether user inputs a `Cellustering` instance.
++ Data frame manipulation: `qc_plot()` conducts column sum, row sum, and ranking over the data frame.
++ ggplot2: `qc_plot()` uses `ggplot2` package to plot.
++ Regular expression: `qc_plot()` uses regular expression and text manipulation to search for mitochondrial genes.
+
+## `qc_filter()`: Filter out low-quality cells and genes
+
+According to the plots created by `qc_plot()`, we can set conditions over the QC covariates to filter out low-quality cells and genes. `qc_filter()` will do the filtering and return the `Cellustering` instance.
+
+In the example here, we only retain cells and genes satisfying the following conditions:
+
++ The number of genes per cell (feature counts) > 200 & < 2500.
++ The fraction of counts from mitochondrial genes per cell (mitochondrial percent) < 5%.
++ The number of cells per gene (cell counts) > 3.
+
+```{r qc_filter}
+pbmc <- qc_filter(pbmc, 
+                  min_feature = 200, 
+                  max_feature = 2500, 
+                  max_mito_percent = 5, 
+                  min_cell = 3)
+```
+
+We can check the dimension of the count matrix and QC plots again:
+
+```{r recheck_and_replot, fig.width=8, fig.height=6}
+dim(pbmc@data)
+pbmc <- qc_plot(pbmc)
+pbmc@quality$violin_plot
+```
+
+We can see that 19024 cells and 74 genes are filtered out.
+
+### Advantages of `Cellustering` over others
+
+For packages like `Seurat`, they don't have built-in functions for filtering, user has to manually filter out genes and cells.
+
+### Connection to course materials
+
++ Testing: `qc_filter()` checks whether user input has correct data type and appropriate value.
++ Indexing: `qc_filter()` uses indexing with booleans on-the-fly to achieve the filtering.
+
+
+# Data normalization
+
+Due to the variations in total count depths among different cells, the magnitudes of gene expression counts of two cells may not be on a comparable scale. To remove the effect of count depth, we need to conduct cell-level normalization.
+
+The most commonly used normalization protocol is count depth scaling, also referred to as Counts Per Million” or CPM normalization [(Luecken & Theis, 2019)](https://www.embopress.org/doi/full/10.15252/msb.20188746). It scales the expression counts of different cells and unifies their count depths to 1e6. Variations of this method set the scale factors to be different factors of 10.
+
+After normalization, the count matrix is typically log(x+1)-transformed. This transformation has three important effects: 
+
++ Distances between log-transformed expression values represent log fold changes, which are the canonical way to measure changes in expression.
++ Log transformation mitigates (but does not remove) the mean–variance relationship in single-cell data [(Brennecke et al, 2013)](https://www.huber.embl.de/pub/pdf/Brennecke2013.pdf). 
++ Log transformation reduces the skewness of the data to approximate the assumption of many downstream analysis tools that the data are normally distributed.
+
+## `normalize()`: Conduct cell-level normalization
+
+The `normalize()` function allows us to normalize the count matrix with CPM protocol and its variation. We can also control whether to apply log(x+1) transformation by setting the `log_transformation` parameter. The count matrix in the `data` slot is overwritten by its normalized version. And the `Cellustering` instance is returned by the `normalize` function.
+
+```{r normalize}
+pbmc <- normalize(pbmc, scale_factor = 1e6, log_transformation = TRUE)
+```
+
+### Advantages of `Cellustering` over others
+
+Compared to other packages like `Seurat`, the variations of CPM are also employed by `Cellustering`.  User is able to tune the scale factor since its value may impact the analysis in the presence of technical dropout effects.
+
+### Connection to course materials
+
++ Testing: `normalize()` checks whether user input has correct data type and appropriate value.
++ Dplyr: `normalize()` uses `Dplyr` to achieve CPM and its variations.
+
+# Feature Selection
+
+A human single-cell RNA-seq dataset can have over 15,000 dimensions even after filtering out these low-count genes in the QC step. Many of these genes will not be informative for the clustering task. To ease the computational burden on downstream analysis, we consider keeping only genes that are “informative” of the variability in the data. According to [Brennecke et al (2013)](https://www.huber.embl.de/pub/pdf/Brennecke2013.pdf), highly variable genes (HVGs) can effectively preserve the data variability. Typically, between 1,000 and 5,000 HVGs are selected for downstream analysis.
+
+## `find_HVG()`: Identify, visualize, and keep HVGs
+
+The `find_HVG()` function allows us to select HVGs through the variance stabilizing transformation (VST) algorithm. The algorithm takes the following steps:
+
+1. The sample mean and sample variance of the expression counts for each gene are calculated.
+2. A local polynomial regression model is fitted over the means and variances.
+3. Predict each gene's sample variance using the fitted model and sample mean.
+4. Standardize the count matrix using sample means and predicted variances.
+5. Clipping the standardized values if it's too large.
+6. Recompute the sample variance of the expression counts for each gene.
+7. Rank the recomputed sample variances and select HVGs.
+
+We can control the smoothness of the local polynomial regression model by tuning the `loess_span` parameter. The count matrix in the `data` slot is overwritten and keeps only HVGs. The `Cellustering` instance is returned by the `normalize` function.
+
+```{r find_HVG, fig.width=8, fig.height=6}
+pbmc <- find_HVG(pbmc, n_feature = 2000, loess_span = 0.5)
+pbmc@HVG$HVG_plot
+```
+
+### Advantages of `Cellustering` over others
+
+For packages like `Seurat`, they employ a binning method in the analysis to increase the accuracy at the cost of computing time. However, preliminary results from [Klein et al (2015)](https://www.cell.com/cell/pdf/S0092-8674(15)00500-0.pdf) suggest that downstream analysis is robust to the exact choice of the number of HVGs. While varying the number of HVGs, the authors reported similar low-dimensional representations in the PCA space, meaning selecting a small number of HVGs with high accuracy can be substituted by selecting more HVGs with lower accuracy. Based on that, `Cellustering` dispenses with the binning method and increases the speed of the algorithm.
+
+### Connection to course materials
+
++ Testing: `find_HVG()` checks whether the count matrix has gone through the normalization step and whether user input has correct data type and appropriate value.
++ Apply: `find_HVG()` uses `apply()` to compute the sample means and sample variances of gene expressions.
++ Model fitting: `find_HVG()` fits a local polynomial regression model (by calling `loess()`) and make predictions on data.
++ ggplot: `find_HVG()` uses `ggplot2` package to plot.
+
+
