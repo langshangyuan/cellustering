@@ -35,14 +35,16 @@ different cells on a comparable scale.
 # find_HVG(pbmc) # report error
 
 # Run the necessary to catch up the progress
-pbmc_small <- qc_plot(pbmc_small)
-pbmc_small <- qc_filter(pbmc_small)
+data("pbmc_small")
+pbmc_small_4 <- Cellustering(pbmc_small@data)
+pbmc_small_4 <- qc_plot(pbmc_small_4)
+pbmc_small_4 <- qc_filter(pbmc_small_4)
 
-col_sum_before <- sum(pbmc_small@data[, 1])
-element_before <- pbmc_small@data[30, 1]
-pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-col_sum_after <- sum(pbmc_small@data[, 1])
-element_after <- pbmc_small@data[30, 1]
+col_sum_before <- sum(pbmc_small_4@data[, 1])
+element_before <- pbmc_small_4@data[30, 1]
+pbmc_small_4 <- normalize(pbmc_small_4, scale_factor = 1e6)
+col_sum_after <- sum(pbmc_small_4@data[, 1])
+element_after <- pbmc_small_4@data[30, 1]
 all.equal(element_after, log(element_before / col_sum_before * 1e6 + 1))
-all.equal(sum(exp(pbmc_small@data[, 1]) - 1), 1e6)
+all.equal(sum(exp(pbmc_small_4@data[, 1]) - 1), 1e6)
 }

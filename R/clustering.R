@@ -15,14 +15,16 @@
 #' @examples
 #' # Run the necessary to catch up the progress
 #' data("pbmc_small")
-#' pbmc_small_9 <- pbmc_small
+#' pbmc_small_9 <- Cellustering(pbmc_small@data)
 #' pbmc_small_9 <- qc_plot(pbmc_small_9)
 #' pbmc_small_9 <- qc_filter(pbmc_small_9)
 #' pbmc_small_9 <- normalize(pbmc_small_9, scale_factor = 1e6)
 #' pbmc_small_9 <- find_HVG(pbmc_small_9, n_feature = 20)
 #' pbmc_small_9 <- scale_data(pbmc_small_9)
 #' pbmc_small_9 <- principal_component_analysis(pbmc_small_9)
-#' pbmc_small_9 <- select_proper_dimension(pbmc_small_9)
+#' pbmc_small_9 <- select_proper_dimension(pbmc_small_9,
+#'   lower_bound = 1, upper_bound = 5
+#' )
 #'
 #' pbmc_small_9 <- kmeans(pbmc_small_9, 2)
 #'
@@ -174,18 +176,19 @@ kmeans <- function(object,
 #' @examples
 #' # Run the necessary to catch up the progress
 #' data("pbmc_small")
-#' pbmc_small <- qc_plot(pbmc_small)
-#' pbmc_small <- qc_filter(pbmc_small)
-#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-#' pbmc_small <- find_HVG(pbmc_small, n_feature = 20)
-#' pbmc_small <- scale_data(pbmc_small)
-#' pbmc_small <- principal_component_analysis(pbmc_small)
-#' pbmc_small <- select_proper_dimension(pbmc_small,
+#' pbmc_small_0 <- Cellustering(pbmc_small@data)
+#' pbmc_small_0 <- qc_plot(pbmc_small_0)
+#' pbmc_small_0 <- qc_filter(pbmc_small_0)
+#' pbmc_small_0 <- normalize(pbmc_small_0, scale_factor = 1e6)
+#' pbmc_small_0 <- find_HVG(pbmc_small_0, n_feature = 20)
+#' pbmc_small_0 <- scale_data(pbmc_small_0)
+#' pbmc_small_0 <- principal_component_analysis(pbmc_small_0)
+#' pbmc_small_0 <- select_proper_dimension(pbmc_small_0,
 #'   lower_bound = 1, upper_bound = 5
 #' )
-#' pbmc_small <- kmeans(pbmc_small, 2)
+#' pbmc_small_0 <- kmeans(pbmc_small_0, 2)
 #'
-#' pbmc_small <- compute_silhouette(pbmc_small)
+#' pbmc_small_0 <- compute_silhouette(pbmc_small_0)
 compute_silhouette <- function(object) {
   # Check if the object belongs to "Cellustering class"
   if (!is(object, "Cellustering")) {

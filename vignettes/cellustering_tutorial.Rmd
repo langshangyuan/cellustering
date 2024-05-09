@@ -29,7 +29,8 @@ We start by reading in the scRNA-seq data.
 `read_10x()` function reads in the data from a file directory containing the outputs of the [Cell Ranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger) pipeline from 10X. Notice that the file format is required to be the [Market Exchange Format (MEX)](https://www.10xgenomics.com/cn/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices). `read_10x()` combines the data in these files and generates a [UMI](https://www.illumina.com/techniques/sequencing/ngs-library-prep/multiplexing/unique-molecular-identifiers.html) count matrix. A `Cellustering` instance with count matrix stored in the `data` slot will be automatically created and returned.
 
 ```{r read_10x}
-pbmc <- read_10x("/Users/ren/Documents/hg19")
+#' pbmc <- read_10x("/Users/ren/Documents/hg19")
+pbmc <- read_10x(cellustering_example("hg19"))
 pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:4]
 ```
 
@@ -55,13 +56,6 @@ In `Cellustering` package, every function operates on an instance of the `Cellus
 + progress: Stores the progress of the whole analysis process.
 
 The slots of an `Cellustering` instance can be accessed through the `@` operator.
-
-```{r cellustering_class}
-class(pbmc)[1]
-slotNames(pbmc)
-pbmc@progress
-```
-
 
 ## About `pbmc` data
 
@@ -135,11 +129,12 @@ In the example here, we only retain cells and genes satisfying the following con
 + The number of cells per gene (cell counts) > 3.
 
 ```{r qc_filter}
-pbmc <- qc_filter(pbmc, 
-                  min_feature = 200, 
-                  max_feature = 2500, 
-                  max_mito_percent = 5, 
-                  min_cell = 3)
+pbmc <- qc_filter(pbmc,
+  min_feature = 200,
+  max_feature = 2500,
+  max_mito_percent = 5,
+  min_cell = 3
+)
 ```
 
 We can check the dimension of the count matrix and QC plots again:
@@ -168,10 +163,10 @@ Due to the variations in total count depths among different cells, the magnitude
 
 The most commonly used normalization protocol is count depth scaling, also referred to as Counts Per Million” or CPM normalization [(Luecken & Theis, 2019)](https://www.embopress.org/doi/full/10.15252/msb.20188746). It scales the expression counts of different cells and unifies their count depths to 1e6. Variations of this method set the scale factors to be different factors of 10.
 
-After normalization, the count matrix is typically log(x+1)-transformed. This transformation has three important effects: 
+After normalization, the count matrix is typically log(x+1)-transformed. This transformation has three important effects:
 
 + Distances between log-transformed expression values represent log fold changes, which are the canonical way to measure changes in expression.
-+ Log transformation mitigates (but does not remove) the mean–variance relationship in single-cell data [(Brennecke et al, 2013)](https://www.huber.embl.de/pub/pdf/Brennecke2013.pdf). 
++ Log transformation mitigates (but does not remove) the mean–variance relationship in single-cell data [(Brennecke et al, 2013)](https://www.huber.embl.de/pub/pdf/Brennecke2013.pdf).
 + Log transformation reduces the skewness of the data to approximate the assumption of many downstream analysis tools that the data are normally distributed.
 
 ## `normalize()`: Conduct cell-level normalization

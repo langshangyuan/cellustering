@@ -22,13 +22,16 @@ Determine an appropriate dimension for data to be reduced to.
 }
 \examples{
 # Run the necessary to catch up the progress
-data(pbmc_small)
-pbmc_small <- qc_plot(pbmc_small)
-pbmc_small <- qc_filter(pbmc_small)
-pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-pbmc_small <- find_HVG(pbmc_small)
-pbmc_small <- scale_data(pbmc_small)
-pbmc_small <- principal_component_analysis(pbmc_small)
+data("pbmc_small")
+pbmc_small_8 <- Cellustering(pbmc_small@data)
+pbmc_small_8 <- qc_plot(pbmc_small_8)
+pbmc_small_8 <- qc_filter(pbmc_small_8)
+pbmc_small_8 <- normalize(pbmc_small_8, scale_factor = 1e6)
+pbmc_small_8 <- find_HVG(pbmc_small_8, n_feature = 20)
+pbmc_small_8 <- scale_data(pbmc_small_8)
+pbmc_small_8 <- principal_component_analysis(pbmc_small_8)
 
-pbmc_small <- select_proper_dimension(pbmc_small)
+pbmc_small_8 <- select_proper_dimension(pbmc_small_8,
+  lower_bound = 1, upper_bound = 5
+)
 }

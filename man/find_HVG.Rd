@@ -26,11 +26,12 @@ Identify, visualize, and select features called highly variable genes (HVGs).
 # scale_data(pbmc) # report error
 
 # Run the necessary to catch up the progress
-data(pbmc_small)
-pbmc_small <- qc_plot(pbmc_small)
-pbmc_small <- qc_filter(pbmc_small)
-pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+data("pbmc_small")
+pbmc_small_5 <- Cellustering(pbmc_small@data)
+pbmc_small_5 <- qc_plot(pbmc_small_5)
+pbmc_small_5 <- qc_filter(pbmc_small_5)
+pbmc_small_5 <- normalize(pbmc_small_5, scale_factor = 1e6)
 
-pbmc_small <- find_HVG(pbmc_small, n_feature = 40)
-pbmc_small@HVG$HVG_plot
+pbmc_small_5 <- find_HVG(pbmc_small_5, n_feature = 20)
+pbmc_small_5@HVG$HVG_plot
 }

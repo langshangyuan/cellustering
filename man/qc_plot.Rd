@@ -17,10 +17,12 @@ process.
 Function to plot distribution of total count and feature count or violin plot
 }
 \examples{
-pbmc <- read_10x("hg19")
+# pbmc <- read_10x("hg19")
 # qc_plot(123) # report Error
 # qc_filter(pbmc) # report Error
-pbmc_small <- qc_plot(pbmc_small)
-head(pbmc@quality$cell_data)
-head(pbmc@quality$feature_data)
+data("pbmc_small")
+pbmc_small_2 <- Cellustering(pbmc_small@data)
+pbmc_small_2 <- qc_plot(pbmc_small_2)
+head(pbmc_small_2@quality$cell_data)
+head(pbmc_small_2@quality$feature_data)
 }

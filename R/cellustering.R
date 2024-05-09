@@ -19,7 +19,13 @@ setClass("Cellustering",
   )
 )
 
-# Initialize a Cellustering instance
+#' Initialize a Cellustering instance
+#'
+#' @param  parameter_1  Parameter one Description.
+#' @param  parameter_2  Parameter two Description.
+#'
+#' @return  Parameter two Description.
+#' @export
 Cellustering <- function(data,
                          quality = list(),
                          HVG = list(),
@@ -46,14 +52,3 @@ Cellustering <- function(data,
     progress = progress
   )
 }
-
-#' PBMC Small
-#'
-#' The `pbmc_small` is a tiny dataset tailored from the `pbmc` dataset for
-#' illustration the entire workflow of the `cellustering` package.
-#'
-#' @format ` pbmc_small`
-#' A `Cellustering` instance whose data is a dataframe with 230 rows and 80
-#' columns:
-#' @source <https://github.com/satijalab/seurat>
-"pbmc_small"

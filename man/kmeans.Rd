@@ -26,14 +26,16 @@ Perform cluster analysis with the K-means clustering algorithm.
 \examples{
 # Run the necessary to catch up the progress
 data("pbmc_small")
-pbmc_small_9 <- pbmc_small
+pbmc_small_9 <- Cellustering(pbmc_small@data)
 pbmc_small_9 <- qc_plot(pbmc_small_9)
 pbmc_small_9 <- qc_filter(pbmc_small_9)
 pbmc_small_9 <- normalize(pbmc_small_9, scale_factor = 1e6)
 pbmc_small_9 <- find_HVG(pbmc_small_9, n_feature = 20)
 pbmc_small_9 <- scale_data(pbmc_small_9)
 pbmc_small_9 <- principal_component_analysis(pbmc_small_9)
-pbmc_small_9 <- select_proper_dimension(pbmc_small_9)
+pbmc_small_9 <- select_proper_dimension(pbmc_small_9,
+  lower_bound = 1, upper_bound = 5
+)
 
 pbmc_small_9 <- kmeans(pbmc_small_9, 2)
 

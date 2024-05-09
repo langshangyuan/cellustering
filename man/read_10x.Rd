@@ -2,8 +2,8 @@
 % Please edit documentation in R/initialize.R
 \name{read_10x}
 \alias{read_10x}
-\title{Initialize a \code{Cellustering} instance from a directory containing
-files storing single cell RNA data in the 10x standard.}
+\title{Initialize a \code{Cellustering} instance from a directory containing files
+storing 10X single-cell RNA data in Market Exchange (MEX) file format.}
 \usage{
 read_10x(directory)
 }
@@ -14,10 +14,10 @@ read_10x(directory)
 A \code{Cellustering} instance.
 }
 \description{
-Initialize a \code{Cellustering} instance from a directory containing
-files storing single cell RNA data in the 10x standard.
+Initialize a \code{Cellustering} instance from a directory containing files
+storing 10X single-cell RNA data in Market Exchange (MEX) file format.
 }
 \examples{
-pbmc <- read_10x("hg19")
-pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
+# pbmc <- read_10x(cellustering_example("hg19"))
+# pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
 }

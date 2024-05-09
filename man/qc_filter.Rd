@@ -47,16 +47,18 @@ Filter out low-quality cells and genes based on user-defined conditions.
 # qc_filter(pbmc, min.count.depth = -1) # report Error
 # qc_filter(pbmc, min.cells = "abc") # report Error
 # Run the necessary to catch up the progress
-pbmc_small <- qc_plot(pbmc_small)
+data("pbmc_small")
+pbmc_small_3 <- Cellustering(pbmc_small@data)
+pbmc_small_3 <- qc_plot(pbmc_small_3)
 
-pbmc_small <- qc_filter(pbmc_small)
-dim(pbmc_small@data)
+pbmc_small_3 <- qc_filter(pbmc_small_3)
+dim(pbmc_small_3@data)
 
-pbmc_small <- qc_filter(pbmc_small,
+pbmc_small_3 <- qc_filter(pbmc_small_3,
   min_feature = 200, max_feature = 2500,
   max_mito_percent = 5, min_cell = 3
 )
-dim(pbmc_small@data)
+dim(pbmc_small_3@data)
 # Then we check the plots again
-pbmc_small <- qc_plot(pbmc_small)
+pbmc_small_3 <- qc_plot(pbmc_small_3)
 }

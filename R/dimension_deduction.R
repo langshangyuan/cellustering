@@ -14,13 +14,15 @@
 #' # principal_component_analysis(pbmc, PC1 = 0.1, PC2 = 3000)  # report error
 #'
 #' # Run the necessary to catch up the progress
-#' pbmc_small <- qc_plot(pbmc_small)
-#' pbmc_small <- qc_filter(pbmc_small)
-#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-#' pbmc_small <- find_HVG(pbmc_small)
-#' pbmc_small <- scale_data(pbmc_small)
+#' data("pbmc_small")
+#' pbmc_small_7 <- Cellustering(pbmc_small@data)
+#' pbmc_small_7 <- qc_plot(pbmc_small_7)
+#' pbmc_small_7 <- qc_filter(pbmc_small_7)
+#' pbmc_small_7 <- normalize(pbmc_small_7, scale_factor = 1e6)
+#' pbmc_small_7 <- find_HVG(pbmc_small_7, n_feature = 20)
+#' pbmc_small_7 <- scale_data(pbmc_small_7)
 #'
-#' pbmc_small <- principal_component_analysis(pbmc_small)
+#' pbmc_small_7 <- principal_component_analysis(pbmc_small_7)
 #'
 #' @importFrom ggplot2 theme element_text
 principal_component_analysis <- function(object,
@@ -105,15 +107,18 @@ principal_component_analysis <- function(object,
 #'
 #' @examples
 #' # Run the necessary to catch up the progress
-#' data(pbmc_small)
-#' pbmc_small <- qc_plot(pbmc_small)
-#' pbmc_small <- qc_filter(pbmc_small)
-#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-#' pbmc_small <- find_HVG(pbmc_small)
-#' pbmc_small <- scale_data(pbmc_small)
-#' pbmc_small <- principal_component_analysis(pbmc_small)
+#' data("pbmc_small")
+#' pbmc_small_8 <- Cellustering(pbmc_small@data)
+#' pbmc_small_8 <- qc_plot(pbmc_small_8)
+#' pbmc_small_8 <- qc_filter(pbmc_small_8)
+#' pbmc_small_8 <- normalize(pbmc_small_8, scale_factor = 1e6)
+#' pbmc_small_8 <- find_HVG(pbmc_small_8, n_feature = 20)
+#' pbmc_small_8 <- scale_data(pbmc_small_8)
+#' pbmc_small_8 <- principal_component_analysis(pbmc_small_8)
 #'
-#' pbmc_small <- select_proper_dimension(pbmc_small)
+#' pbmc_small_8 <- select_proper_dimension(pbmc_small_8,
+#'   lower_bound = 1, upper_bound = 5
+#' )
 select_proper_dimension <- function(object,
                                     lower_bound = 1,
                                     upper_bound = 30) {

@@ -1,4 +1,4 @@
-#' Initialize a `Cellustering` instance from a directory containing files 
+#' Initialize a `Cellustering` instance from a directory containing files
 #' storing 10X single-cell RNA data in Market Exchange (MEX) file format.
 #'
 #' @param directory A directory containing single cell RNA data.
@@ -9,8 +9,8 @@
 #' @importFrom utils read.table
 #'
 #' @examples
-#' pbmc <- read_10x("hg19")
-#' pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
+#' # pbmc <- read_10x(cellustering_example("hg19"))
+#' # pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
 read_10x <- function(directory) {
   # Check if the directory exists
   if (!(is.character(directory) && dir.exists(directory))) {

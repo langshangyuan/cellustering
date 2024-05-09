@@ -9,20 +9,22 @@
 #'
 #' @examples
 #' # Run the necessary to catch up the progress
-#' pbmc_small <- qc_plot(pbmc_small)
-#' pbmc_small <- qc_filter(pbmc_small)
-#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
-#' pbmc_small <- find_HVG(pbmc_small)
+#' data("pbmc_small")
+#' pbmc_small_6 <- Cellustering(pbmc_small@data)
+#' pbmc_small_6 <- qc_plot(pbmc_small_6)
+#' pbmc_small_6 <- qc_filter(pbmc_small_6)
+#' pbmc_small_6 <- normalize(pbmc_small_6, scale_factor = 1e6)
+#' pbmc_small_6 <- find_HVG(pbmc_small_6, n_feature = 20)
 #'
-#' pbmc_small <- scale_data(pbmc_small)
-#' pbmc_small@reduced_dimension$scaled_data[1:5, 1:10]
+#' pbmc_small_6 <- scale_data(pbmc_small_6)
+#' pbmc_small_6@reduced_dimension$scaled_data[1:5, 1:10]
 #'
 #' # Check if the row sums equal to 0
-#' row_sums <- rowSums(pbmc_small@reduced_dimension$scaled_data)
+#' row_sums <- rowSums(pbmc_small_6@reduced_dimension$scaled_data)
 #' all.equal(row_sums, rep(0, 2000), check.attributes = FALSE)
 #'
 #' # Check if the row sd equal to 1
-#' sds <- apply(pbmc_small@reduced_dimension$scaled_data, 1, sd)
+#' sds <- apply(pbmc_small_6@reduced_dimension$scaled_data, 1, sd)
 #' all.equal(sds, rep(1, 2000), check.attributes = FALSE)
 scale_data <- function(object) {
   # Check if the object belongs to "Cellustering class"
