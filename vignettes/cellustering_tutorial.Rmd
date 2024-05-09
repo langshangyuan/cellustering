@@ -1,0 +1,35 @@
+---
+title: "Cellustering Guided Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cellustering Guided Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette offers you a guided tutorial on using `Cellustering`, a toolkit designed for the preprocessing and clustering analysis of single-cell RNA sequencing (scRNA-seq) data. In this tutorial, we will demonstrate the usage of our package through a streamlined analysis of a Peripheral Blood Mono-nuclear Cells (PBMC) 10X Genomics dataset. We will also illuminate the principles behind methodologies used in our package, and underscore the distinctive advantages that set `Cellustering` apart from previous solutions in the field.
+
+```{r setup}
+library(cellustering)
+```
+
+# Read in the Data
+
+## `read_10x`: Initialize `Cellustering` instance from 10X Genomics dataset
+
+We start by reading in the scRNA-seq data. The `read_10x()` function reads in the data from a file directory containing the outputs of the [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger) pipeline from 10X. Notice that the file format is required to be the [Market Exchange Format (MEX)](https://www.10xgenomics.com/cn/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices). A `Cellustering` instance with data stored in the `data` slot will be automatically created and returned.
+
+```{r}
+pbmc <- read_10x("/Users/ren/Documents/hg19")
+pbmc@data[c("CD3D", "TCL1A", "MS4A1"), 1:30]
+```
+
+
+The purpose is to remove the variations in count depths between different cells, and to place the gene expression levels of different cells on a comparable scale.

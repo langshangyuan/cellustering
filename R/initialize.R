@@ -1,5 +1,5 @@
-#' Initialize a `Cellustering` instance from a directory containing
-#' files storing single cell RNA data in the 10x standard.
+#' Initialize a `Cellustering` instance from a directory containing files 
+#' storing 10X single-cell RNA data in Market Exchange (MEX) file format.
 #'
 #' @param directory A directory containing single cell RNA data.
 #'
