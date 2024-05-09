@@ -2,21 +2,37 @@
 % Please edit documentation in R/dimension_deduction.R
 \name{principal_component_analysis}
 \alias{principal_component_analysis}
-\title{Function Description}
+\title{Perform Principal Component Analysis (PCA) and visualize the data with two
+specified principal components (PCs).}
 \usage{
 principal_component_analysis(object, PC1 = 1, PC2 = 2)
 }
 \arguments{
-\item{object}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
+
+\item{PC1}{The index of the first principal component to be visualized.}
+
+\item{PC2}{The index of the second principal component to be visualized.}
 }
 \value{
-Parameter two Description.
+The \code{Cellustering} instance with singular value decomposition (SVD)
+information and PCA plot added to the \code{reduced_dimension} slot.
 }
 \description{
-Function Description
+Perform Principal Component Analysis (PCA) and visualize the data with two
+specified principal components (PCs).
 }
 \examples{
 # principal_component_analysis(123) # report error
 # principal_component_analysis(pbmc, PC1 = 0.1, PC2 = 3000)  # report error
-pbmc <- principal_component_analysis(pbmc, PC1 = 3, PC2 = 4)
+
+# Run the necessary to catch up the progress
+pbmc_small <- qc_plot(pbmc_small)
+pbmc_small <- qc_filter(pbmc_small)
+pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+pbmc_small <- find_HVG(pbmc_small)
+pbmc_small <- scale_data(pbmc_small)
+
+pbmc_small <- principal_component_analysis(pbmc_small)
+
 }

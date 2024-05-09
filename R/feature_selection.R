@@ -1,11 +1,11 @@
 #' Identify, visualize, and select features called highly variable genes (HVGs).
-#' 
+#'
 #' @param  object  A `Cellustering` instance.
 #' @param  n_feature  The number of features to select.
-#' @param  loess_span  The span parameter for the local regression model, 
+#' @param  loess_span  The span parameter for the local regression model,
 #' controlling smoothness of the fitted curve.
 #'
-#' @return  The `Cellusetering` instance with HVG names and plot added to the 
+#' @return  The `Cellusetering` instance with HVG names and plot added to the
 #' `HVG` slot.
 #' @export
 #'
@@ -16,8 +16,15 @@
 #' @examples
 #' # find_HVG(123) # report error
 #' # scale_data(pbmc) # report error
-#' pbmc <- find_HVG(pbmc)
-#' pbmc@HVG$HVG_plot
+#'
+#' # Run the necessary to catch up the progress
+#' data(pbmc_small)
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#'
+#' pbmc_small <- find_HVG(pbmc_small, n_feature = 40)
+#' pbmc_small@HVG$HVG_plot
 find_HVG <- function(object,
                      n_feature = 2000,
                      loess_span = 0.5) {

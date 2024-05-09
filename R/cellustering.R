@@ -46,3 +46,14 @@ Cellustering <- function(data,
     progress = progress
   )
 }
+
+#' PBMC Small
+#'
+#' The `pbmc_small` is a tiny dataset tailored from the `pbmc` dataset for
+#' illustration the entire workflow of the `cellustering` package.
+#'
+#' @format ` pbmc_small`
+#' A `Cellustering` instance whose data is a dataframe with 230 rows and 80
+#' columns:
+#' @source <https://github.com/satijalab/seurat>
+"pbmc_small"

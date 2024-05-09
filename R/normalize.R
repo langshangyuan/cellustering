@@ -1,30 +1,35 @@
-#' Normalize the data using the Counts per Million (CPM) normalization 
-#' protocol. The purpose of normalization is to remove the variations in count 
-#' depths among different cells, and to place the gene expression levels of 
+#' Normalize the data using the Counts per Million (CPM) normalization
+#' protocol. The purpose of normalization is to remove the variations in count
+#' depths among different cells, and to place the gene expression levels of
 #' different cells on a comparable scale.
 #'
 #' @param object A `Cellustering` instance.
-#' @param scale_factor The level to which each cell's total count depth is 
+#' @param scale_factor The level to which each cell's total count depth is
 #' normalized.
-#' @param log_transformation Determine whether to perform log-transformation 
+#' @param log_transformation Determine whether to perform log-transformation
 #' after the CPM normalization.
 #'
-#' @return  The `Cellustering` instance with normalized data stored in the 
+#' @return  The `Cellustering` instance with normalized data stored in the
 #' `data` slot.
 #' @export
 #'
 #' @examples
-#' normalize(123) # report error
-#' normalize(pbmc, scale.factor = -100) # report error
-#' normalize(pbmc, log.transformation = "abc") # report error
-#' find_HVG(pbmc) # report error
-#' col_sum_before <- sum(pbmc@data[, 1])
-#' element_before <- pbmc@data[30, 1]
-#' pbmc <- normalize(pbmc, scale_factor = 1e6)
-#' col_sum_after <- sum(pbmc@data[, 1])
-#' element_after <- pbmc@data[30, 1]
-#' all.equal(element.after, log(element.before / col.sum.before * 1e6 + 1))
-#' all.equal(sum(exp(pbmc@data[, 1]) - 1), 1e6)
+#' # normalize(123) # report error
+#' # normalize(pbmc, scale.factor = -100) # report error
+#' # normalize(pbmc, log.transformation = "abc") # report error
+#' # find_HVG(pbmc) # report error
+#'
+#' # Run the necessary to catch up the progress
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#'
+#' col_sum_before <- sum(pbmc_small@data[, 1])
+#' element_before <- pbmc_small@data[30, 1]
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#' col_sum_after <- sum(pbmc_small@data[, 1])
+#' element_after <- pbmc_small@data[30, 1]
+#' all.equal(element_after, log(element_before / col_sum_before * 1e6 + 1))
+#' all.equal(sum(exp(pbmc_small@data[, 1]) - 1), 1e6)
 normalize <- function(object,
                       scale_factor = 1e6,
                       log_transformation = TRUE) {

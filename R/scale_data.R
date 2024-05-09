@@ -1,22 +1,28 @@
-#' Scale and center the selected features (HVG) data，ensuring that each HVG's 
+#' Scale and center the selected features (HVG) data，ensuring that each HVG's
 #' expression counts have mean 0 and variance 1.
 #'
 #' @param  object A `Cellustering` instance.
 #'
-#' @return The `Cellusetering` instance with the scaled data added to the 
+#' @return The `Cellusetering` instance with the scaled data added to the
 #' `reduced_dimension` slot.
 #' @export
 #'
 #' @examples
-#' pbmc <- scale_data(pbmc)
-#' pbmc@reduced_dimension$scaled_data[1:5, 1:10]
+#' # Run the necessary to catch up the progress
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#' pbmc_small <- find_HVG(pbmc_small)
+#'
+#' pbmc_small <- scale_data(pbmc_small)
+#' pbmc_small@reduced_dimension$scaled_data[1:5, 1:10]
 #'
 #' # Check if the row sums equal to 0
-#' row.sums <- rowSums(pbmc@reduced_dimension$scaled_data)
-#' all.equal(row.sums, rep(0, 2000), check.attributes = FALSE)
+#' row_sums <- rowSums(pbmc_small@reduced_dimension$scaled_data)
+#' all.equal(row_sums, rep(0, 2000), check.attributes = FALSE)
 #'
 #' # Check if the row sd equal to 1
-#' sds <- apply(pbmc@reduced_dimension$scaled_data, 1, sd)
+#' sds <- apply(pbmc_small@reduced_dimension$scaled_data, 1, sd)
 #' all.equal(sds, rep(1, 2000), check.attributes = FALSE)
 scale_data <- function(object) {
   # Check if the object belongs to "Cellustering class"

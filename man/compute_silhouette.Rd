@@ -2,16 +2,33 @@
 % Please edit documentation in R/clustering.R
 \name{compute_silhouette}
 \alias{compute_silhouette}
-\title{Function Description}
+\title{Calculate the average silhouette coefficient for the clustering results.}
 \usage{
 compute_silhouette(object)
 }
 \arguments{
-\item{object}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 }
 \value{
-Parameter two Description.
+The \code{Cellustering} instance with the average silhouette coefficient
+added to the \code{clustering} slot.
 }
 \description{
-Function Description
+Calculate the average silhouette coefficient for the clustering results.
+}
+\examples{
+# Run the necessary to catch up the progress
+data("pbmc_small")
+pbmc_small <- qc_plot(pbmc_small)
+pbmc_small <- qc_filter(pbmc_small)
+pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+pbmc_small <- find_HVG(pbmc_small, n_feature = 20)
+pbmc_small <- scale_data(pbmc_small)
+pbmc_small <- principal_component_analysis(pbmc_small)
+pbmc_small <- select_proper_dimension(pbmc_small,
+  lower_bound = 1, upper_bound = 5
+)
+pbmc_small <- kmeans(pbmc_small, 2)
+
+pbmc_small <- compute_silhouette(pbmc_small)
 }

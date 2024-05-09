@@ -2,24 +2,35 @@
 % Please edit documentation in R/feature_selection.R
 \name{find_HVG}
 \alias{find_HVG}
-\title{Function Description}
+\title{Identify, visualize, and select features called highly variable genes (HVGs).}
 \usage{
 find_HVG(object, n_feature = 2000, loess_span = 0.5)
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 
-\item{parameter_2}{Parameter two Description.}
+\item{n_feature}{The number of features to select.}
+
+\item{loess_span}{The span parameter for the local regression model,
+controlling smoothness of the fitted curve.}
 }
 \value{
-Parameter two Description.
+The \code{Cellusetering} instance with HVG names and plot added to the
+\code{HVG} slot.
 }
 \description{
-Function Description
+Identify, visualize, and select features called highly variable genes (HVGs).
 }
 \examples{
 # find_HVG(123) # report error
 # scale_data(pbmc) # report error
-pbmc <- find_HVG(pbmc)
-pbmc@HVG$HVG_plot
+
+# Run the necessary to catch up the progress
+data(pbmc_small)
+pbmc_small <- qc_plot(pbmc_small)
+pbmc_small <- qc_filter(pbmc_small)
+pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+
+pbmc_small <- find_HVG(pbmc_small, n_feature = 40)
+pbmc_small@HVG$HVG_plot
 }

@@ -1,19 +1,31 @@
 #' Perform cluster analysis with the K-means clustering algorithm.
 #'
-#' @param  object  A `Cellustering` instance. 
+#' @param  object  A `Cellustering` instance.
 #' @param  k  The number of clusters.
 #' @param  dimensions  The number of principal components used for clustering.
-#' @param umap Determine whether to use Uniform Manifold Approximation and 
+#' @param umap Determine whether to use Uniform Manifold Approximation and
 #' Projection (UMAP) for visualization.
 #'
-#' @return  The `Cellustering` instance with clustering results and 
+#' @return  The `Cellustering` instance with clustering results and
 #' visualization added to the `clustering` slot.
 #' @export
 #'
 #' @importFrom stats kmeans
 #'
 #' @examples
-# library(umap)
+#' # Run the necessary to catch up the progress
+#' data("pbmc_small")
+#' pbmc_small_9 <- pbmc_small
+#' pbmc_small_9 <- qc_plot(pbmc_small_9)
+#' pbmc_small_9 <- qc_filter(pbmc_small_9)
+#' pbmc_small_9 <- normalize(pbmc_small_9, scale_factor = 1e6)
+#' pbmc_small_9 <- find_HVG(pbmc_small_9, n_feature = 20)
+#' pbmc_small_9 <- scale_data(pbmc_small_9)
+#' pbmc_small_9 <- principal_component_analysis(pbmc_small_9)
+#' pbmc_small_9 <- select_proper_dimension(pbmc_small_9)
+#'
+#' pbmc_small_9 <- kmeans(pbmc_small_9, 2)
+#'
 kmeans <- function(object,
                    k,
                    dimensions = 10,
@@ -153,13 +165,27 @@ kmeans <- function(object,
 #'
 #' @param object  A `Cellustering` instance.
 #'
-#' @return The `Cellustering` instance with the average silhouette coefficient 
+#' @return The `Cellustering` instance with the average silhouette coefficient
 #' added to the `clustering` slot.
 #' @export
 #'
 #' @importFrom stats dist
 #'
 #' @examples
+#' # Run the necessary to catch up the progress
+#' data("pbmc_small")
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#' pbmc_small <- find_HVG(pbmc_small, n_feature = 20)
+#' pbmc_small <- scale_data(pbmc_small)
+#' pbmc_small <- principal_component_analysis(pbmc_small)
+#' pbmc_small <- select_proper_dimension(pbmc_small,
+#'   lower_bound = 1, upper_bound = 5
+#' )
+#' pbmc_small <- kmeans(pbmc_small, 2)
+#'
+#' pbmc_small <- compute_silhouette(pbmc_small)
 compute_silhouette <- function(object) {
   # Check if the object belongs to "Cellustering class"
   if (!is(object, "Cellustering")) {

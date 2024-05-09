@@ -2,18 +2,39 @@
 % Please edit documentation in R/clustering.R
 \name{kmeans}
 \alias{kmeans}
-\title{Function Description}
+\title{Perform cluster analysis with the K-means clustering algorithm.}
 \usage{
 kmeans(object, k, dimensions = 10, umap = FALSE)
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 
-\item{parameter_2}{Parameter two Description.}
+\item{k}{The number of clusters.}
+
+\item{dimensions}{The number of principal components used for clustering.}
+
+\item{umap}{Determine whether to use Uniform Manifold Approximation and
+Projection (UMAP) for visualization.}
 }
 \value{
-Parameter two Description.
+The \code{Cellustering} instance with clustering results and
+visualization added to the \code{clustering} slot.
 }
 \description{
-Function Description
+Perform cluster analysis with the K-means clustering algorithm.
+}
+\examples{
+# Run the necessary to catch up the progress
+data("pbmc_small")
+pbmc_small_9 <- pbmc_small
+pbmc_small_9 <- qc_plot(pbmc_small_9)
+pbmc_small_9 <- qc_filter(pbmc_small_9)
+pbmc_small_9 <- normalize(pbmc_small_9, scale_factor = 1e6)
+pbmc_small_9 <- find_HVG(pbmc_small_9, n_feature = 20)
+pbmc_small_9 <- scale_data(pbmc_small_9)
+pbmc_small_9 <- principal_component_analysis(pbmc_small_9)
+pbmc_small_9 <- select_proper_dimension(pbmc_small_9)
+
+pbmc_small_9 <- kmeans(pbmc_small_9, 2)
+
 }
