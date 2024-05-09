@@ -2,21 +2,33 @@
 % Please edit documentation in R/dimension_deduction.R
 \name{select_proper_dimension}
 \alias{select_proper_dimension}
-\title{Function Description}
+\title{Determine an appropriate dimension for data to be reduced to.}
 \usage{
 select_proper_dimension(object, lower_bound = 1, upper_bound = 30)
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 
-\item{parameter_2}{Parameter two Description.}
+\item{lower_bound}{The minimum number of principal components to consider.}
+
+\item{upper_bound}{The maximum number of principal components to consider.}
 }
 \value{
-Parameter two Description.
+The \code{Cellusetering} instance with suggested dimension and plots
+added to the \code{reduced_dimension} slot.
 }
 \description{
-Function Description
+Determine an appropriate dimension for data to be reduced to.
 }
 \examples{
-pbmc <- select_proper_dimension(pbmc)
+# Run the necessary to catch up the progress
+data(pbmc_small)
+pbmc_small <- qc_plot(pbmc_small)
+pbmc_small <- qc_filter(pbmc_small)
+pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+pbmc_small <- find_HVG(pbmc_small)
+pbmc_small <- scale_data(pbmc_small)
+pbmc_small <- principal_component_analysis(pbmc_small)
+
+pbmc_small <- select_proper_dimension(pbmc_small)
 }

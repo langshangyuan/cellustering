@@ -2,7 +2,7 @@
 % Please edit documentation in R/preprocessing.R
 \name{qc_filter}
 \alias{qc_filter}
-\title{Function Description}
+\title{Filter out low-quality cells and genes based on user-defined conditions.}
 \usage{
 qc_filter(
   object,
@@ -16,28 +16,47 @@ qc_filter(
 )
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 
-\item{parameter_2}{Parameter two Description.}
+\item{min_count_depth}{The minimum count depth allowed for a cell.}
+
+\item{max_count_depth}{The maximum count depth allowed for a cell.}
+
+\item{min_feature}{The minimum number of features allowed for a cell.}
+
+\item{max_feature}{The maximum number of features allowed for a cell.}
+
+\item{max_mito_percent}{The maximum mitochondrial gene percentage allowed
+for a cell.}
+
+\item{min_total_expression}{The minimum total expression allowed for a
+gene.}
+
+\item{min_cell}{The minimum number of cells in which a gene must be
+expressed.}
 }
 \value{
-Parameter two Description.
+A \code{Cellustering} instance with cells and genes satisfying the
+filtering conditions.
 }
 \description{
-Function Description
+Filter out low-quality cells and genes based on user-defined conditions.
 }
 \examples{
 # qc_filter(123) # report Error
 # qc_filter(pbmc, min.count.depth = -1) # report Error
 # qc_filter(pbmc, min.cells = "abc") # report Error
-pbmc <- qc_filter(pbmc_ready_to_filter)
-dim(pbmc@data)
+# Run the necessary to catch up the progress
+pbmc_small <- qc_plot(pbmc_small)
 
-pbmc <- qc_filter(pbmc_ready_to_filter,
+pbmc_small <- qc_filter(pbmc_small)
+dim(pbmc_small@data)
+
+pbmc_small <- qc_filter(pbmc_small,
   min_feature = 200, max_feature = 2500,
   max_mito_percent = 5, min_cell = 3
 )
-dim(pbmc@data)
+dim(pbmc_small@data)
 # Then we check the plots again
-pbmc <- qc_plot(pbmc)
+pbmc_small <- qc_plot(pbmc_small)
 }

@@ -2,31 +2,47 @@
 % Please edit documentation in R/normalize.R
 \name{normalize}
 \alias{normalize}
-\title{Function Description}
+\title{Normalize the data using the Counts per Million (CPM) normalization
+protocol. The purpose of normalization is to remove the variations in count
+depths among different cells, and to place the gene expression levels of
+different cells on a comparable scale.}
 \usage{
 normalize(object, scale_factor = 1e+06, log_transformation = TRUE)
 }
 \arguments{
-\item{object}{Parameter one Description.}
+\item{object}{A \code{Cellustering} instance.}
 
-\item{scale_factor}{Parameter two Description.}
+\item{scale_factor}{The level to which each cell's total count depth is
+normalized.}
+
+\item{log_transformation}{Determine whether to perform log-transformation
+after the CPM normalization.}
 }
 \value{
-Parameter two Description.
+The \code{Cellustering} instance with normalized data stored in the
+\code{data} slot.
 }
 \description{
-Function Description
+Normalize the data using the Counts per Million (CPM) normalization
+protocol. The purpose of normalization is to remove the variations in count
+depths among different cells, and to place the gene expression levels of
+different cells on a comparable scale.
 }
 \examples{
-normalize(123) # report error
-normalize(pbmc, scale.factor = -100) # report error
-normalize(pbmc, log.transformation = "abc") # report error
-find_HVG(pbmc) # report error
-col_sum_before <- sum(pbmc@data[, 1])
-element_before <- pbmc@data[30, 1]
-pbmc <- normalize(pbmc, scale_factor = 1e6)
-col_sum_after <- sum(pbmc@data[, 1])
-element_after <- pbmc@data[30, 1]
-all.equal(element.after, log(element.before / col.sum.before * 1e6 + 1))
-all.equal(sum(exp(pbmc@data[, 1]) - 1), 1e6)
+# normalize(123) # report error
+# normalize(pbmc, scale.factor = -100) # report error
+# normalize(pbmc, log.transformation = "abc") # report error
+# find_HVG(pbmc) # report error
+
+# Run the necessary to catch up the progress
+pbmc_small <- qc_plot(pbmc_small)
+pbmc_small <- qc_filter(pbmc_small)
+
+col_sum_before <- sum(pbmc_small@data[, 1])
+element_before <- pbmc_small@data[30, 1]
+pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+col_sum_after <- sum(pbmc_small@data[, 1])
+element_after <- pbmc_small@data[30, 1]
+all.equal(element_after, log(element_before / col_sum_before * 1e6 + 1))
+all.equal(sum(exp(pbmc_small@data[, 1]) - 1), 1e6)
 }

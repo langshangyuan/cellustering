@@ -1,18 +1,27 @@
-#' Perform Principal Component Analysis (PCA) and visualize the data with two 
+#' Perform Principal Component Analysis (PCA) and visualize the data with two
 #' specified principal components (PCs).
-#' 
-#' @param  object A `Cellustering` instance. 
-#' @param  PC1  The index of the first principal component to be visualized. 
-#' @param  PC2  The index of the second principal component to be visualized. 
 #'
-#' @return  The `Cellustering` instance with singular value decomposition (SVD) 
+#' @param  object A `Cellustering` instance.
+#' @param  PC1  The index of the first principal component to be visualized.
+#' @param  PC2  The index of the second principal component to be visualized.
+#'
+#' @return  The `Cellustering` instance with singular value decomposition (SVD)
 #' information and PCA plot added to the `reduced_dimension` slot.
 #' @export
 #'
 #' @examples
 #' # principal_component_analysis(123) # report error
 #' # principal_component_analysis(pbmc, PC1 = 0.1, PC2 = 3000)  # report error
-#' pbmc <- principal_component_analysis(pbmc, PC1 = 3, PC2 = 4)
+#'
+#' # Run the necessary to catch up the progress
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#' pbmc_small <- find_HVG(pbmc_small)
+#' pbmc_small <- scale_data(pbmc_small)
+#'
+#' pbmc_small <- principal_component_analysis(pbmc_small)
+#'
 #' @importFrom ggplot2 theme element_text
 principal_component_analysis <- function(object,
                                          PC1 = 1,
@@ -82,20 +91,29 @@ principal_component_analysis <- function(object,
 
 # Examples
 
-#' Determine an appropriate dimension for data to be reduced to. 
+#' Determine an appropriate dimension for data to be reduced to.
 #'
 #' @param  object  A `Cellustering` instance.
 #' @param  lower_bound  The minimum number of principal components to consider.
 #' @param  upper_bound  The maximum number of principal components to consider.
 #'
-#' @return  The `Cellusetering` instance with suggested dimension and plots 
+#' @return  The `Cellusetering` instance with suggested dimension and plots
 #' added to the `reduced_dimension` slot.
 #' @export
-#' @importFrom utils head
+#' @importFrom utils head tail
 #' @importFrom stats dnorm sd
 #'
 #' @examples
-#' pbmc <- select_proper_dimension(pbmc)
+#' # Run the necessary to catch up the progress
+#' data(pbmc_small)
+#' pbmc_small <- qc_plot(pbmc_small)
+#' pbmc_small <- qc_filter(pbmc_small)
+#' pbmc_small <- normalize(pbmc_small, scale_factor = 1e6)
+#' pbmc_small <- find_HVG(pbmc_small)
+#' pbmc_small <- scale_data(pbmc_small)
+#' pbmc_small <- principal_component_analysis(pbmc_small)
+#'
+#' pbmc_small <- select_proper_dimension(pbmc_small)
 select_proper_dimension <- function(object,
                                     lower_bound = 1,
                                     upper_bound = 30) {
@@ -243,7 +261,7 @@ select_proper_dimension <- function(object,
   object@reduced_dimension$suggested_dimension <- suggested_dimension
 
   # Combine, save, and show plot
-  dimension_selection_plot <- cowplot::plot_grid(
+  dimension_selection_plot <- plot_grid(
     scree_plot, likelihood_plot,
     ncol = 2
   )

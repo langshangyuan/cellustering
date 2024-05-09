@@ -14,9 +14,9 @@
 #'
 #' @examples
 #' pbmc <- read_10x("hg19")
-#' qc_plot(123) # report Error
-#' qc_filter(pbmc) # report Error
-#' pbmc <- qc_plot(pbmc)
+#' # qc_plot(123) # report Error
+#' # qc_filter(pbmc) # report Error
+#' pbmc_small <- qc_plot(pbmc_small)
 #' head(pbmc@quality$cell_data)
 #' head(pbmc@quality$feature_data)
 qc_plot <- function(object) {
@@ -69,6 +69,7 @@ qc_summarize <- function(object) {
 
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_line geom_point labs
 #' theme_minimal
+#' @importFrom cowplot plot_grid
 qc_plot_cell <- function(object) {
   cell_data <- object@quality$cell
   cell_plot_total <- ggplot(cell_data, aes(x = count_depth)) +
@@ -117,7 +118,7 @@ qc_plot_cell <- function(object) {
     ) +
     theme_minimal()
 
-  cell_plot <- cowplot::plot_grid(
+  cell_plot <- plot_grid(
     cell_plot_total, cell_plot_unique, cell_plot_rank, cell_plot_joint,
     ncol = 2
   )
@@ -161,7 +162,7 @@ qc_plot_gene <- function(object) {
     ggplot2::coord_cartesian(xlim = c(0, 25)) +
     ggplot2::theme_minimal()
 
-  feature_plot <- cowplot::plot_grid(
+  feature_plot <- plot_grid(
     plot_gene_total, plot_gene_unique,
     ncol = 2
   )
@@ -189,7 +190,7 @@ qc_plot_violin <- function(object) {
     geom_violin(fill = "#6a3d9a", color = "black", lwd = 0.2) +
     labs(title = "Mitochondrial Percent", x = "", y = "") +
     theme_minimal()
-  violin_plot <- cowplot::plot_grid(
+  violin_plot <- plot_grid(
     violin_cell_total, violin_cell_unique, violin_cell_mito,
     ncol = 3
   )
@@ -200,19 +201,19 @@ qc_plot_violin <- function(object) {
 
 #' Filter out low-quality cells and genes based on user-defined conditions.
 #'
-#' @param  object  A `Cellustering` instance. 
+#' @param  object  A `Cellustering` instance.
 #' @param  min_count_depth  The minimum count depth allowed for a cell.
 #' @param  max_count_depth  The maximum count depth allowed for a cell.
 #' @param  min_feature  The minimum number of features allowed for a cell.
 #' @param  max_feature  The maximum number of features allowed for a cell.
 #' @param  max_mito_percent  The maximum mitochondrial gene percentage allowed
 #' for a cell.
-#' @param  min_total_expression  The minimum total expression allowed for a 
+#' @param  min_total_expression  The minimum total expression allowed for a
 #' gene.
-#' @param  min_cell  The minimum number of cells in which a gene must be 
+#' @param  min_cell  The minimum number of cells in which a gene must be
 #'                   expressed.
 
-#' @return  A `Cellustering` instance with cells and genes satisfying the 
+#' @return  A `Cellustering` instance with cells and genes satisfying the
 #' filtering conditions.
 #' @export
 #'
@@ -220,16 +221,19 @@ qc_plot_violin <- function(object) {
 #' # qc_filter(123) # report Error
 #' # qc_filter(pbmc, min.count.depth = -1) # report Error
 #' # qc_filter(pbmc, min.cells = "abc") # report Error
-#' pbmc <- qc_filter(pbmc_ready_to_filter)
-#' dim(pbmc@data)
+#' # Run the necessary to catch up the progress
+#' pbmc_small <- qc_plot(pbmc_small)
 #'
-#' pbmc <- qc_filter(pbmc_ready_to_filter,
+#' pbmc_small <- qc_filter(pbmc_small)
+#' dim(pbmc_small@data)
+#'
+#' pbmc_small <- qc_filter(pbmc_small,
 #'   min_feature = 200, max_feature = 2500,
 #'   max_mito_percent = 5, min_cell = 3
 #' )
-#' dim(pbmc@data)
+#' dim(pbmc_small@data)
 #' # Then we check the plots again
-#' pbmc <- qc_plot(pbmc)
+#' pbmc_small <- qc_plot(pbmc_small)
 qc_filter <- function(object,
                       min_count_depth = 0,
                       max_count_depth = Inf,
@@ -242,6 +246,9 @@ qc_filter <- function(object,
   if (!is(object, "Cellustering")) {
     stop("Please input a Cellustering object.")
   }
+
+  object <- object |>
+    qc_summarize()
 
   # Check if other parameters are in correct data types
   proper_type <- all(
@@ -283,6 +290,5 @@ qc_filter <- function(object,
   object@data <- object@data[gene_index, cell_index]
   # Return the object
   object@progress["qc_filter"] <- TRUE
-  object@progress["qc_plot"] <- FALSE
   invisible(object)
 }
