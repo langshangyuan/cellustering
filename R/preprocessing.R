@@ -72,9 +72,10 @@ qc_summarize <- function(object) {
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_line geom_point labs
 #' theme_minimal
 #' @importFrom cowplot plot_grid
+#' @importFrom rlang .data
 qc_plot_cell <- function(object) {
   cell_data <- object@quality$cell
-  cell_plot_total <- ggplot(cell_data, aes(x = count_depth)) +
+  cell_plot_total <- ggplot(cell_data, aes(x = .data$count_depth)) +
     geom_histogram(
       binwidth = 200, fill = "#1f78b4", color = "white", lwd = 0.2
     ) +
@@ -84,7 +85,7 @@ qc_plot_cell <- function(object) {
     ) +
     theme_minimal()
 
-  cell_plot_unique <- ggplot(cell_data, aes(x = feature_count)) +
+  cell_plot_unique <- ggplot(cell_data, aes(x = .data$feature_count)) +
     geom_histogram(
       binwidth = 50, fill = "#33a02c", color = "white", lwd = 0.2
     ) +
@@ -97,7 +98,7 @@ qc_plot_cell <- function(object) {
   barcode_rank <- rank(-cell_data$count_depth)
   cell_plot_rank <- ggplot(
     cell_data,
-    aes(x = barcode_rank, y = count_depth)
+    aes(x = barcode_rank, y = .data$count_depth)
   ) +
     geom_line(color = "#6a3d9a") +
     labs(
@@ -107,8 +108,8 @@ qc_plot_cell <- function(object) {
     theme_minimal()
 
   cell_plot_joint <- ggplot(cell_data, aes(
-    x = count_depth, y = feature_count,
-    color = mito_percent
+    x = .data$count_depth, y = .data$feature_count,
+    color = .data$mito_percent
   )) +
     geom_point(position = "jitter", size = 0.001) +
     ggplot2::scale_color_gradientn(
@@ -140,7 +141,7 @@ qc_plot_gene <- function(object) {
 
   plot_gene_total <- ggplot2::ggplot(
     trunc_feature_total_count,
-    aes(x = total_count)
+    aes(x = .data$total_count)
   ) +
     ggplot2::geom_histogram(
       binwidth = 1, fill = "#1f78b4", color = "white", lwd = 0.2
@@ -153,7 +154,7 @@ qc_plot_gene <- function(object) {
     ggplot2::theme_minimal()
 
 
-  plot_gene_unique <- ggplot2::ggplot(feature_data, aes(x = cell_count)) +
+  plot_gene_unique <- ggplot2::ggplot(feature_data, aes(x = .data$cell_count)) +
     ggplot2::geom_histogram(
       binwidth = 1, fill = "#33a02c", color = "white", lwd = 0.2
     ) +
@@ -175,20 +176,20 @@ qc_plot_gene <- function(object) {
 #' @importFrom ggplot2 ggplot aes geom_violin labs theme_minimal
 qc_plot_violin <- function(object) {
   cell_data <- object@quality$cell
-  violin_cell_total <- ggplot(cell_data, aes(x = 1, y = count_depth)) +
+  violin_cell_total <- ggplot(cell_data, aes(x = 1, y = .data$count_depth)) +
     geom_violin(fill = "#1f78b4", color = "black", lwd = 0.2) +
     labs(title = "Count Depth", x = "", y = "") +
     theme_minimal()
 
   violin_cell_unique <- ggplot(
     cell_data,
-    aes(x = 1, y = feature_count)
+    aes(x = 1, y = .data$feature_count)
   ) +
     geom_violin(fill = "#33a02c", color = "black", lwd = 0.2) +
     labs(title = "Feature Counts", x = "", y = "") +
     theme_minimal()
 
-  violin_cell_mito <- ggplot(cell_data, aes(x = 1, y = mito_percent)) +
+  violin_cell_mito <- ggplot(cell_data, aes(x = 1, y = .data$mito_percent)) +
     geom_violin(fill = "#6a3d9a", color = "black", lwd = 0.2) +
     labs(title = "Mitochondrial Percent", x = "", y = "") +
     theme_minimal()
