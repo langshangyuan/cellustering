@@ -180,7 +180,6 @@ select_proper_dimension <- function(object,
       y = paste("Eigenvalue Sums")
     ) +
     theme_minimal()
-  print(scree_plot)
 
   # Do the profile-likelihood plot
   eigenvalue_sum <- sum(eigenvalues)
