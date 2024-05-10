@@ -441,21 +441,21 @@ $$
 + *Initialization: set $K$ cluster centers $\textbf{c}$ to random values*
 
 + *Repeat the following steps until convergence (the assignments don't change):*
-  
+
   * *Assignment: Given the cluster ceneters $\textbf{c}$, update the assignments $\textbf{r}$ by solving the following sub-problem:*
-  
+
 $$
 \min _{\boldsymbol{r}} \sum_{i}^{n} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}, \text { subject to } \textbf{r} \in\{0,1\}^{n \times K}, \sum_{k}^{K} r_{i k}=1
 $$
 
   *Note that the assignment for each data $\textbf{x}_{i}$ can be solved independently. i.e.*
-  
+
 $$
 \min _{\boldsymbol{r}} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}, \text { subject to } \textbf{r}_{i} \in\{0,1\}^{1 * K}, \sum_{k}^{K} r_{i k}=1
 $$
 
   *It is easy to know that assign $\textbf{x}_{i}$ to the closest cluster is the optimal solution.*
-  
+
 $$
 k^{*}=\arg \min \left\{\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}\right\}_{k=1}^{K}, \text { and } \sum_{k}^{K} r_{i k^{*}}=1
 $$
@@ -490,7 +490,7 @@ pbmc <- kmeans(pbmc, k = 7, dimensions = 4)
 
 ### Advantages of `Cellustering` over others
 
-For packages like `Seurat`, they use community detection methods like graph-partitioning algorithms. However, these algorithms cannot specify the exact number of clusters. User can only make rough adjustment on cluster numbers by tuning the `resolution` parameter. 
+For packages like `Seurat`, they use community detection methods like graph-partitioning algorithms. However, these algorithms cannot specify the exact number of clusters. User can only make rough adjustment on cluster numbers by tuning the `resolution` parameter.
 
 ### Connection to course materials
 

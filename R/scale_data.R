@@ -1,4 +1,4 @@
-#' Scale and center the selected features (HVG) data，ensuring that each HVG's
+#' Scale and center the selected features (HVG) data, ensuring that each HVG's
 #' expression counts have mean 0 and variance 1.
 #'
 #' @param  object A `Cellustering` instance.

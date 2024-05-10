@@ -2,7 +2,7 @@
 % Please edit documentation in R/scale_data.R
 \name{scale_data}
 \alias{scale_data}
-\title{Scale and center the selected features (HVG) data，ensuring that each HVG's
+\title{Scale and center the selected features (HVG) data, ensuring that each HVG's
 expression counts have mean 0 and variance 1.}
 \usage{
 scale_data(object)
@@ -15,7 +15,7 @@ The \code{Cellusetering} instance with the scaled data added to the
 \code{reduced_dimension} slot.
 }
 \description{
-Scale and center the selected features (HVG) data，ensuring that each HVG's
+Scale and center the selected features (HVG) data, ensuring that each HVG's
 expression counts have mean 0 and variance 1.
 }
 \examples{

@@ -4,7 +4,7 @@
 \alias{kmeans}
 \title{Perform cluster analysis with the K-means clustering algorithm.}
 \usage{
-kmeans(object, k, dimensions = 10, umap = FALSE)
+kmeans(object, k, dimensions = 10)
 }
 \arguments{
 \item{object}{A \code{Cellustering} instance.}
@@ -12,9 +12,6 @@ kmeans(object, k, dimensions = 10, umap = FALSE)
 \item{k}{The number of clusters.}
 
 \item{dimensions}{The number of principal components used for clustering.}
-
-\item{umap}{Determine whether to use Uniform Manifold Approximation and
-Projection (UMAP) for visualization.}
 }
 \value{
 The \code{Cellustering} instance with clustering results and

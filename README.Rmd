@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of cellustering is to ...
+The cellustering is a toolkit designed for the preprocessing and clustering analysis of single-cell RNA sequencing (scRNA-seq) data.
 
 ## Installation
 
@@ -31,25 +31,32 @@ devtools::install_github("langshangyuan/cellustering")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to create plots to facilitate quality control:
 
 ```{r example}
 library(cellustering)
 ## basic example code
+pbmc <- read_10x(cellustering_example("hg19"))
+pbmc <- qc_plot(pbmc)
+head(pbmc@quality$cell)
+head(pbmc@quality$feature)
+pbmc@quality$cell_plot
+pbmc@quality$violin_plot
+pbmc@quality$feature_plot
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+After we perform the preprocessing steps like filter, normalize, we can call the `Cellustering` package to find the High Variation Genes, perform principal component analysis, and call a clustering method.
 
 ```{r cars}
-summary(cars)
+pbmc <- qc_filter(pbmc,
+  min_feature = 200,
+  max_feature = 2500,
+  max_mito_percent = 5,
+  min_cell = 3
+)
+pbmc <- normalize(pbmc, scale_factor = 1e6, log_transformation = TRUE)
+pbmc <- find_HVG(pbmc, n_feature = 2000, loess_span = 0.5)
+pbmc <- scale_data(pbmc)
+pbmc <- principal_component_analysis(pbmc, PC1 = 3, PC2 = 4)
+pbmc <- kmeans(pbmc, k = 7, dimensions = 4)
 ```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

@@ -3,8 +3,6 @@
 #' @param  object  A `Cellustering` instance.
 #' @param  k  The number of clusters.
 #' @param  dimensions  The number of principal components used for clustering.
-#' @param umap Determine whether to use Uniform Manifold Approximation and
-#' Projection (UMAP) for visualization.
 #'
 #' @return  The `Cellustering` instance with clustering results and
 #' visualization added to the `clustering` slot.
@@ -30,9 +28,9 @@
 #'
 kmeans <- function(object,
                    k,
-                   dimensions = 10,
-                   umap = FALSE) {
+                   dimensions = 10) {
   # Check if the object belongs to "Cellustering class"
+  umap <- FALSE
   if (!is(object, "Cellustering")) {
     stop("Please input a Cellustering object.")
   }
@@ -108,7 +106,6 @@ kmeans <- function(object,
 
   # Visualize
   visualization_base <- object@reduced_dimension$PCA_plot
-  ## (如果 umap == FALSE，用 pca visualize)
   if (umap) {
     cluster_plot <- visualization_base
   } else {

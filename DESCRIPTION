@@ -1,6 +1,6 @@
 Package: cellustering
 Title: Clustering for Single-Cell RNA-Seq Data
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("Zhiyuan", "Gao", , "121090136@link.cuhk.edu.cn", role = c("aut")),
     person("Zhecheng", "Ren", , "121090464@link.cuhk.edu.cn", role = c("aut", "cre")),
