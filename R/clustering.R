@@ -70,7 +70,6 @@ kmeans <- function(object,
   object@clustering$data <- projected_data
   fast_kmeans <- stats::kmeans(projected_data, k)
   cluster_assignment <- fast_kmeans$cluster
-  # print(cluster_assignment)
   centroids <- fast_kmeans$centers
   cluster_result <- list(clusters = cluster_assignment, centroids = centroids)
 
@@ -92,31 +91,6 @@ kmeans <- function(object,
   #     }
   #   }
   #   # Assign points to closest centroid
-  #   # new_cluster_assignment <- apply(distance_matrix, 2, which.min)
-  #   print(time)
-  #   new_cluster_assignment <- apply(distance_matrix, 1, which.min)
-  #   print(new_cluster_assignment)
-  #   # If no change in assignments, break the loop
-  #   if (all(cluster_assignment == new_cluster_assignment)) {
-  #     break
-  #   }
-
-  #   # Update cluster assignments
-  #   cluster_assignment <- new_cluster_assignment
-
-  #   # Update centroids
-  #   for (i in 1:k) {
-  #     centroids[i, ] <- colMeans(projected_data[cluster_assignment == i, ])
-  #   }
-  # }
-  # while (TRUE) {
-  #   for (i in 1:N) {
-  #     for (j in 1:k) {
-  #       distance_matrix[i, j] <- distance(projected_data[i, ], centroids[j, ])
-  #     }
-  #   }
-  #   # Assign points to closest centroid
-  #   # new_cluster_assignment <- apply(distance_matrix, 2, which.min)
   #   new_cluster_assignment <- apply(distance_matrix, 1, which.min)
   #   # If no change in assignments, break the loop
   #   if (all(cluster_assignment == new_cluster_assignment)) {
@@ -131,8 +105,6 @@ kmeans <- function(object,
   #     centroids[i, ] <- colMeans(projected_data[cluster_assignment == i, ])
   #   }
   # }
-  # print(cluster_assignment)
-  # cluster_result <- list(clusters = cluster_assignment, centroids = centroids)
 
   # Visualize
   visualization_base <- object@reduced_dimension$PCA_plot

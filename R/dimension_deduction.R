@@ -171,7 +171,9 @@ select_proper_dimension <- function(object,
     dim = lower_bound:upper_bound,
     eigenvalue_sum = tail_eigenvalue_sum
   )
-  scree_plot <- ggplot(scree_plot_data, aes(x = dim, y = eigenvalue_sum)) +
+  scree_plot <- ggplot(
+    scree_plot_data, aes(x = .data$dim, y = .data$eigenvalue_sum)
+  ) +
     geom_point(size = 1, color = "#1f78b4") +
     geom_line(color = "#1f78b4") +
     labs(
@@ -244,7 +246,9 @@ select_proper_dimension <- function(object,
     dim = lower_bound:upper_bound,
     l = log.likelihoods
   )
-  likelihood_plot <- ggplot(likelihood_plot_data, aes(x = dim, y = l)) +
+  likelihood_plot <- ggplot(
+    likelihood_plot_data, aes(x = .data$dim, y = .data$l)
+  ) +
     geom_point(size = 1, color = "#33a02c") +
     labs(
       title = "Profile Log Likelihood Plot",
@@ -255,7 +259,7 @@ select_proper_dimension <- function(object,
   if (lower_bound < upper_bound) {
     likelihood_plot <- likelihood_plot +
       geom_line(
-        mapping = aes(x = dim, y = l),
+        mapping = aes(x = .data$dim, y = .data$l),
         data = likelihood_plot_data,
         color = "#33a02c"
       )

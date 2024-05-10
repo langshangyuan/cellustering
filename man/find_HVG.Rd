@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_selection.R
 \name{find_HVG}
 \alias{find_HVG}
-\title{Identify, visualize, and select features called highly variable genes (HVGs).}
+\title{Identify, visualize, and keep features called highly variable genes (HVGs).}
 \usage{
 find_HVG(object, n_feature = 2000, loess_span = 0.5)
 }
@@ -19,7 +19,7 @@ The \code{Cellusetering} instance with HVG names and plot added to the
 \code{HVG} slot.
 }
 \description{
-Identify, visualize, and select features called highly variable genes (HVGs).
+Identify, visualize, and keep features called highly variable genes (HVGs).
 }
 \examples{
 # find_HVG(123) # report error

@@ -1,5 +1,5 @@
 #' Identify, visualize, and keep features called highly variable genes (HVGs).
-#' 
+#'
 #' @param  object  A `Cellustering` instance.
 #' @param  n_feature  The number of features to select.
 #' @param  loess_span  The span parameter for the local regression model,
@@ -94,7 +94,10 @@ find_HVG <- function(object,
   plot_data$HVG[HVG_index] <- TRUE
 
   # Plot without labels
-  HVG_plot <- ggplot(plot_data, aes(x = Mean, y = Variance, color = HVG)) +
+  HVG_plot <- ggplot(
+    plot_data,
+    aes(x = .data$Mean, y = .data$Variance, color = .data$HVG)
+  ) +
     geom_point(size = 0.5) +
     ggplot2::scale_color_manual(
       values = c("#1f78b4", "#33a02c"),
