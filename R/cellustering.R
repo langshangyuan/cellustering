@@ -21,16 +21,12 @@ setClass("Cellustering",
 
 #' Initialize a Cellustering instance
 #'
-#' @param  parameter_1  Parameter one Description.
-#' @param  parameter_2  Parameter two Description.
+#' @param data The data storing 10X single-cell RNA data
 #'
-#' @return  Parameter two Description.
+#' @return A fresh Cellustering instance with data describing the cell names
+#' and their features.
 #' @export
-Cellustering <- function(data,
-                         quality = list(),
-                         HVG = list(),
-                         reduced_dimension = list(),
-                         clustering = list()) {
+Cellustering <- function(data) {
   progress <- c(
     qc_plot = FALSE,
     qc_filter = FALSE,
@@ -45,10 +41,10 @@ Cellustering <- function(data,
 
   new("Cellustering",
     data = data,
-    quality = quality,
-    HVG = HVG,
-    reduced_dimension = reduced_dimension,
-    clustering = clustering,
+    quality = list(),
+    HVG = list(),
+    reduced_dimension = list(),
+    clustering = list(),
     progress = progress
   )
 }

@@ -4,21 +4,14 @@
 \alias{Cellustering}
 \title{Initialize a Cellustering instance}
 \usage{
-Cellustering(
-  data,
-  quality = list(),
-  HVG = list(),
-  reduced_dimension = list(),
-  clustering = list()
-)
+Cellustering(data)
 }
 \arguments{
-\item{parameter_1}{Parameter one Description.}
-
-\item{parameter_2}{Parameter two Description.}
+\item{data}{The data storing 10X single-cell RNA data}
 }
 \value{
-Parameter two Description.
+A fresh Cellustering instance with data describing the cell names
+and their features.
 }
 \description{
 Initialize a Cellustering instance

@@ -270,7 +270,7 @@ $$
 
 $$
 \begin{array} {r l l}
-\max _{U, U^{T} U=I} \frac{1}{N} \sum_{i=1}^{N}\left\|\tilde{\textbf{x}}^{(n)}-\tilde{\boldsymbol{\mu}}\right\|^{2} 
+\max _{U, U^{T} U=I} \frac{1}{N} \sum_{i=1}^{N}\left\|\tilde{\textbf{x}}^{(n)}-\tilde{\boldsymbol{\mu}}\right\|^{2}
 &\Leftrightarrow& \max _{U, U^{T} U=I} \frac{1}{N} \sum_{i=1}^{N}\left\|\mathbf{z}^{(n)}\right\|^{2} \\
 &\Leftrightarrow& \max _{U, U^{T} U=I} \frac{1}{N} \sum_{i=1}^{N}\left\|U^{T}\left(\textbf{x}^{(n)}-\boldsymbol{\mu}\right)\right\|^{2} \\
 &\Leftrightarrow& \max _{U, U^{T} U=I} \frac{1}{N} \sum_{i=1}^{N} \operatorname{Trace}\left(U^{T}\left(\textbf{x}^{(n)}-\boldsymbol{\mu}\right)\left(\textbf{x}^{(n)}-\boldsymbol{\mu}\right)^{T} U\right)
@@ -343,7 +343,7 @@ pbmc@reduced_dimension$scaled_data[1:5, 1:4]
 
 # Check if the row sums equal to 0
 row_sums <- rowSums(pbmc@reduced_dimension$scaled_data)
-all.equal(row_sums, rep(0, 2000), check.attributes= FALSE)
+all.equal(row_sums, rep(0, 2000), check.attributes = FALSE)
 
 # Check if the row sd equal to 1
 row_sds <- apply(pbmc@reduced_dimension$scaled_data, 1, sd)
