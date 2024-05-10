@@ -220,7 +220,7 @@ For packages like `Seurat`, they employ a binning method in the analysis to incr
 + Testing: `find_HVG()` checks whether the count matrix has gone through the normalization step and whether user input has correct data type and appropriate value.
 + Apply: `find_HVG()` uses `apply()` to compute the sample means and sample variances of gene expressions.
 + Model fitting: `find_HVG()` fits a local polynomial regression model (by calling `loess()`) and make predictions on data.
-+ ggplot: `find_HVG()` uses `ggplot2` package to plot.
++ ggplot2: `find_HVG()` uses `ggplot2` package to plot.
 
 
 # Dimension Reduction
@@ -369,7 +369,7 @@ pbmc <- principal_component_analysis(pbmc, PC1 = 3, PC2 = 4)
 ### Connection to course materials
 
 + Testing: `principal_component_analysis()` checks whether the HVG count matrix has gone through the scaling step and whether user input has correct data type and appropriate value.
-+ ggplot: `principal_component_analysis()` uses `ggplot2` package to plot.
++ ggplot2: `principal_component_analysis()` uses `ggplot2` package to plot.
 
 ## `select_proper_dimension`: Select dimensions for summarization
 
@@ -384,7 +384,7 @@ From the above derivation for PCA, we can easily show that the reconstruction er
 Since the scree plot is monotone, we cannot automate the detection of $L$ by directly picking the minimal or maximal. One way to solve this is to use the profile log-likelihood plot.
 
 + Consider partitioning the eigenvalues $\lambda_{1}\geq\lambda_{2}\geq\cdot\cdot\cdot\cdot\geq\lambda_{L_{m a x}}$ into two groups, depending on whether $k < L$ or $k > L$, where $L$ is some threshold which we will determine.
-+ To measure the quality of L, we assume a simple change-point model, where $\lambda_{k}~\sim~\mathcal{N}({\mu }_{1},\sigma^{2})$ if $k \leq L$, and $\lambda_{k}~\sim~\mathcal{N}({\mu}_{2},\sigma^{2})$ if $k > L$. within each regimes, assume the $\lambda_k$ are iid.
++ To measure the quality of L, we assume a simple change-point model, where $\lambda_{k}\sim\mathcal{N}({\mu }_{1},\sigma^{2})$ if $k \leq L$, and $\lambda_{k}\sim\mathcal{N}({\mu}_{2},\sigma^{2})$ if $k > L$. within each regimes, assume the $\lambda_k$ are iid.
 + For each $L = 1:L_{max}$, evaluate the profile log likelihood:
 $$
 \begin{array}{r c l}
@@ -406,8 +406,121 @@ For packages like `SC3` and `TSCAN`, they don't have a function to facilitate th
 
 For packages like `Seurat`, they produces elbow plot (which functions just like scree plot), heatmap plot and others for facilitation. However, no automatic selection method is applied in these packages.
 
+For packages like `SC3`, they employ the consensus clustering strategy [(Kiselev et al, 2016)](https://www.nature.com/articles/nmeth.4236) to analyze different choices of $L$. However, this procedure may take hours, and the clustering accuracy for large dataset is diminished since it cannot cluster all the cells at one time.
+
 ### Connection to course materials
 
 + Testing: `select_proper_dimension()` checks whether the count matrix has gone through the PCA step and whether user inputs a `Cellustering` instance.
 + Vectorized computation: `select_proper_dimension()` employs vectorized computation in the production of the profile log-likelihood plot.
+
+# Cluster Analysis
+
+Organizing cells into clusters is pivotal in single-cell analysis. Clusters are obtained by grouping cells based on the similarity of their gene expression profiles (the dimension-reduced version).
+
+`Cellustering` uses the popular k-means clustering algorithm. This algorithm divides cells into k clusters by determining cluster centroids and assigning cells to the nearest cluster centroid. Centroid positions are iteratively optimized (MacQueen, 1967).
+
+**Principle of k-means clustering:**
+
+*Given the dataset $\left\{\textbf{x}_{i}\right\}_{i=1}^{n}$, k-means aims to find cluster centers $\textbf{c}=\left\{\textbf{c}_{j}\right\}_{j=1}^{K}$ and assgnments $\mathbf{r}$, by minimizing the sum of squared distances of the data points to their assigned cluster centers. In short, K-means will minimize the within-cluster variance, as follows:*
+
+$$
+\begin{array}{ll}
+&\min _{\textbf{c}, \textbf{r}} J(\boldsymbol{c}, \boldsymbol{r})=\min _{\boldsymbol{c}, \boldsymbol{r}} \sum_{i}^{n} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2} \\
+&\text { Subject to } \quad \textbf{r} \in\{0,1\}^{n * K}, \quad \sum_{k}^{K} r_{i k}=1
+\end{array}
+$$
+*where $r_{i k}=1$ denotes $\textbf{x}_{i}$ is assigned to cluster $k$.*
+
+*The above optimization problem can be solved by coordinate descent algorithm, i.e., update $\textbf{c}$ and $\textbf{r}$ alternatively:*
+
++ *Given the cluster centers $\textbf{c}$, update the assignments $\textbf{r}$*
++ *Given the assignments $\textbf{r}$, update the cluster centers $\textbf{c}$*
+
+*Therefore, the general procedure of the optimization of K-means clustering is:*
+
++ *Initialization: set $K$ cluster centers $\textbf{c}$ to random values*
+
++ *Repeat the following steps until convergence (the assignments don't change):*
+  
+  * *Assignment: Given the cluster ceneters $\textbf{c}$, update the assignments $\textbf{r}$ by solving the following sub-problem:*
+  
+$$
+\min _{\boldsymbol{r}} \sum_{i}^{n} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}, \text { subject to } \textbf{r} \in\{0,1\}^{n \times K}, \sum_{k}^{K} r_{i k}=1
+$$
+
+  *Note that the assignment for each data $\textbf{x}_{i}$ can be solved independently. i.e.*
+  
+$$
+\min _{\boldsymbol{r}} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}, \text { subject to } \textbf{r}_{i} \in\{0,1\}^{1 * K}, \sum_{k}^{K} r_{i k}=1
+$$
+
+  *It is easy to know that assign $\textbf{x}_{i}$ to the closest cluster is the optimal solution.*
+  
+$$
+k^{*}=\arg \min \left\{\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}\right\}_{k=1}^{K}, \text { and } \sum_{k}^{K} r_{i k^{*}}=1
+$$
+
+- *Refitting: Given the assignments $\textbf{r}$, update the cluster centers $\textbf{c}$:*
+
+$$
+\min _{\boldsymbol{c}} \sum_{i}^{n} \sum_{k}^{K} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}
+$$
+
+*Note that $\textbf{c}_{1}, \textbf{c}_{2}, \ldots \ldots, \textbf{c}_{K}$ can be optimized independently, as follows:*
+
+$$
+\min _{c_{k}} \sum_{i}^{n} r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)^{2}
+$$
+
+*By setting the derivative w.r.t. $\textbf{c}_{k}$ as 0 , it is easy to obtain the optimal solution:*
+
+$$
+\sum_{i}^{n} 2 r_{i k}\left(\textbf{x}_{i}-\textbf{c}_{k}\right)=0 \Rightarrow \boldsymbol{c}_{k}=\frac{\sum_{i}^{n} r_{i k} \textbf{x}_{i}}{\sum_{i}^{n} r_{i k}}
+$$
+
+*Thus, $\textbf{c}_{k}$ is the center of the $k$-th cluster.*
+
+## `kmeans()`: Apply k-means clustering on data
+
+The `kmeans()` function applies k-means clustering algorithm on the dimension-reduced HVG count matrix. The number of clusters $k$ needs to be specified by us. The `kmeans()` function generates a two-dimensional plot based on the PCA results and clustering results. The relevant clustering information and plots are stored in the `clustering` slot, and the `Cellustering` instance is returned.
+
+```{r kmeans, fig.width=8, fig.height=6}
+pbmc <- kmeans(pbmc, k = 7, dimensions = 4)
+```
+
+### Advantages of `Cellustering` over others
+
+For packages like `Seurat`, they use community detection methods like graph-partitioning algorithms. However, these algorithms cannot specify the exact number of clusters. User can only make rough adjustment on cluster numbers by tuning the `resolution` parameter. 
+
+### Connection to course materials
+
++ Testing: `kmeans()` checks whether the count matrix has gone through the PCA step and whether user input has correct data type and appropriate value.
++ ggplot2: `kmeans()` uses `ggplot2` package to plot.
+
+## `compute_silhouette()`: Evaluate the clustering results
+
+`Cellustering` uses Silhouette coefficient to evaluate the clustering results.
+
+Silhouette coefficient for a single sample is formulated as:
+
+$$
+s=\frac{b-a}{\max (a, b)} \Rightarrow s= \begin{cases}1-\frac{a}{b} & \text { if } a<b \\ 0 & \text { if } a=b \\ \frac{b}{a}-1 & \text { if } a>b\end{cases}
+$$
+
+It is easy to know that $s \in(-1,1)$, and larger $s$ value indicates better clustering performance. And the Silhouette coefficient $s$ for a set of samples is defined as the mean of the Silhouette Coefficient for each sample.
+
+The derived Silhouette coefficient is stored in the `clustering` slot and the `Cellustering` instance is returned.
+
+```{r compute_silhouette}
+pbmc <- compute_silhouette(pbmc)
+```
+
+### Advantages of `Cellustering` over others
+
+For packages like `Seurat`, they don't have evaluation matrices for clustering results.
+
+### Connection to course materials
+
++ Testing: `compute_silhouette()` checks whether the count matrix has gone through the k-means step and whether user inputs a `Cellustering` instance.
++ Data frame manipulation: `compute_silhouette()` manipulates over the data frame.
 
